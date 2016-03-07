@@ -29,5 +29,10 @@ public class UserDAO implements Serializable{
 		Query query = this.entityManager.createQuery(hql.toString());
 		return (List<User>) query.getResultList();
 	}
-
+	
+	@TransactionAttribute(TransactionAttributeType.REQUIRED)
+	public User save(User user){
+		this.entityManager.persist(user);
+		return user;
+	}
 }

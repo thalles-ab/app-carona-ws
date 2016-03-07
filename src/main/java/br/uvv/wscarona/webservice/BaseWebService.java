@@ -7,7 +7,8 @@ public class BaseWebService {
 	protected Gson gson;
 	
 	public BaseWebService(){
-		this.gson = new GsonBuilder().create();
+		final GsonBuilder builder = new GsonBuilder();
+		this.gson = builder.create();
 	}
 
 }
