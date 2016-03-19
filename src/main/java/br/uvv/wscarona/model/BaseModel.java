@@ -9,6 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Version;
 
+import com.google.gson.annotations.Expose;
+
 @MappedSuperclass
 public class BaseModel implements Serializable {
 
@@ -24,6 +26,7 @@ public class BaseModel implements Serializable {
 
 	@Version
 	@Column(name = "VERSION")
+	@Expose(deserialize = false, serialize = false)
 	private Long version;
 
 	public Long getId() {

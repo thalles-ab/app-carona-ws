@@ -10,10 +10,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-import br.uvv.wscarona.model.User;
+import br.uvv.wscarona.model.Student;
 
 @Stateless
-public class UserDAO implements Serializable{
+public class StudentDAO implements Serializable{
 	/**
 	 * 
 	 */
@@ -24,14 +24,14 @@ public class UserDAO implements Serializable{
 	
 	@SuppressWarnings("unchecked")
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public List<User> getUsers(){
+	public List<Student> getUsers(){
 		StringBuilder hql = new StringBuilder("SELECT u FROM User u");
 		Query query = this.entityManager.createQuery(hql.toString());
-		return (List<User>) query.getResultList();
+		return (List<Student>) query.getResultList();
 	}
 	
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public User save(User user){
+	public Student save(Student user){
 		this.entityManager.persist(user);
 		return user;
 	}
