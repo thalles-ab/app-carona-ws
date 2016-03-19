@@ -12,7 +12,7 @@ import javax.ws.rs.core.Response;
 import br.uvv.wscarona.dao.StudentDAO;
 import br.uvv.wscarona.model.Student;
 
-@Path("/user")
+@Path("/student")
 @RequestScoped
 public class StudentWebService extends BaseWebService {
 	@Inject
@@ -27,7 +27,7 @@ public class StudentWebService extends BaseWebService {
 	@POST
 	public Response save(String json) {
 		Student user = this.gson.fromJson(json, Student.class);
-		user = studentDAO.save(user);
+		user = (Student) studentDAO.save(user);
 		return Response.status(200).entity(this.gson.toJson(user)).build();
 	}
 }
