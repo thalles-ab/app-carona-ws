@@ -25,7 +25,7 @@ public class Student extends BaseModel {
 
 	@Column(name = "CD_STUDENT")
 	@Expose(deserialize = true, serialize = true)
-	private Long code;
+	private String code;
 
 	@Column(name = "DS_PASSWORD")
 	@Expose(deserialize = true, serialize = false)
@@ -62,11 +62,11 @@ public class Student extends BaseModel {
 		this.name = name;
 	}
 
-	public Long getCode() {
+	public String getCode() {
 		return code;
 	}
 
-	public void setCode(Long code) {
+	public void setCode(String code) {
 		this.code = code;
 	}
 }

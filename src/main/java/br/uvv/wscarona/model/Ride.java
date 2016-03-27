@@ -1,13 +1,19 @@
 package br.uvv.wscarona.model;
 
-import java.sql.Date;
+
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
 import com.google.gson.annotations.Expose;
+
 import br.uvv.wscarona.model.enumerator.TypeDay;
 
 @Entity
@@ -27,10 +33,12 @@ public class Ride extends BaseModel {
 	@Expose(deserialize = true, serialize = true)
 	private TypeDay dayType;
 
+	@Temporal(value = TemporalType.TIMESTAMP)
 	@Column(name = "DT_CREATION")
 	@Expose(deserialize = true, serialize = true)
 	private Date creationDate;
 
+	@Temporal(value = TemporalType.TIMESTAMP)
 	@Column(name = "DT_EXPIRATION")
 	@Expose(deserialize = true, serialize = true)
 	private Date expirationDate;

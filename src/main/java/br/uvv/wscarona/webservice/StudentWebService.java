@@ -21,13 +21,13 @@ public class StudentWebService extends BaseWebService {
 	@GET
 	public Response getHelloWorld() {
 		List<Student> list = studentDAO.getUsers();
-		return Response.status(200).entity(this.gson.toJson(list)).build();
+		return successRequest(list);
 	}
 
 	@POST
 	public Response save(String json) {
 		Student user = this.gson.fromJson(json, Student.class);
-		user = (Student) studentDAO.save(user);
-		return Response.status(200).entity(this.gson.toJson(user)).build();
+		user = (Student) studentDAO.merge(user);
+		return successRequest(user);
 	}
 }

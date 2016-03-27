@@ -1,6 +1,7 @@
 package br.uvv.wscarona.model;
 
-import java.sql.Date;
+
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,6 +9,8 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import com.google.gson.annotations.Expose;
 
@@ -27,8 +30,8 @@ public class Token extends BaseModel {
 	@Expose(deserialize = false, serialize = true)
 	private String token;
 
+	@Temporal(value = TemporalType.TIMESTAMP)
 	@Column(name = "DT_EXPIRATION")
-	@Expose(deserialize = true, serialize = true)
 	private Date expirationDate;
 
 	public String getToken() {
@@ -46,4 +49,14 @@ public class Token extends BaseModel {
 	public void setExpirationDate(Date expirationDate) {
 		this.expirationDate = expirationDate;
 	}
+
+	public Student getStudent() {
+		return student;
+	}
+
+	public void setStudent(Student student) {
+		this.student = student;
+	}
+	
+	
 }
