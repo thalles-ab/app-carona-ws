@@ -19,7 +19,7 @@ public class StudentWebService extends BaseWebService {
 	private StudentDAO studentDAO;
 
 	@GET
-	public Response getHelloWorld() {
+	public Response get() {
 		List<Student> list = studentDAO.getUsers();
 		return successRequest(list);
 	}

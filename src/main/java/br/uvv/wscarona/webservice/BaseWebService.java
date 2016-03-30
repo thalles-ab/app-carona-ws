@@ -9,6 +9,7 @@ import javax.ws.rs.core.Response.Status;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import br.uvv.wscarona.model.Student;
 import br.uvv.wscarona.webservice.util.ListMessageException;
 
 @Consumes({MediaType.APPLICATION_JSON})
@@ -16,6 +17,7 @@ import br.uvv.wscarona.webservice.util.ListMessageException;
 public class BaseWebService {
 	protected Gson gson;
 	protected ListMessageException erros;
+	protected static Student studentContext;
 
 	public BaseWebService() {
 		this.gson = getGsonInstance();
@@ -42,5 +44,13 @@ public class BaseWebService {
 		final GsonBuilder builder = new GsonBuilder();
 		builder.excludeFieldsWithoutExposeAnnotation();
 		return builder.create();
+	}
+
+	public static Student getStudentContext() {
+		return studentContext;
+	}
+
+	public static void setStudentContext(Student studentContext) {
+		BaseWebService.studentContext = studentContext;
 	}
 }

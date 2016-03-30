@@ -25,7 +25,7 @@ public class LoginDAO extends GenericDAO {
 	private static final long serialVersionUID = 1L;
 	private static final String SELECT_STUDENT_FOR_LOGIN = "SELECT st FROM Student st WHERE st.code = :code AND st.password = :password";
 	private static final String SELECT_TOKEN_FOR_STUDENT = "SELECT tk FROM Token tk WHERE tk.student.id = :idStudent ";
-	private static final String SELECT_TOKEN = "SELECT tk FROM Token tk WHERE tk.token = :token ";
+	private static final String SELECT_STUDENT_TOKEN = "SELECT st FROM Token tk JOIN tk.student st WHERE tk.token = :token ";
  
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public Student getStudentLogin(Student student) throws ListMessageException {
@@ -89,7 +89,7 @@ public class LoginDAO extends GenericDAO {
 		return (Token) merge(token);
 	}
 
-	public void validateToken(String token) throws ListMessageException {
+	public Student validateToken(String token) throws ListMessageException {
 		try{
 			// VALIDAÇÕES
 			if (token == null) {
@@ -97,13 +97,14 @@ public class LoginDAO extends GenericDAO {
 			} 
 			this.throwErros(); // LANÇA OS ERROS CASO EXISTAM
 	
-			StringBuilder hql = new StringBuilder(SELECT_TOKEN);
+			StringBuilder hql = new StringBuilder(SELECT_STUDENT_TOKEN);
 			Query query = this.entityManager.createQuery(hql.toString());
 			query.setParameter("token", token);
-			query.getSingleResult();
+			return (Student) query.getSingleResult();
 		}catch(NoResultException e){
 			MessageBundle.addError("error.invalid.token", erros);
 			this.throwErros();
+			return null;
 		}
 	}
 }

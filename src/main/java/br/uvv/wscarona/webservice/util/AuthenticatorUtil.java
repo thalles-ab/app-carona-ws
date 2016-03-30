@@ -57,7 +57,7 @@ public class AuthenticatorUtil {
 	
 	// TODO REMOVER AO FINAL DO PROJETO
 	public static void main(String[] args){
-		String pass = hashString("123", "MD5");
+		String pass = hashString("123456", "MD5");
 		System.out.println("PASSWORD PARA REQUEST " + pass);
 		System.out.println("PASSWORD PARA BANCO " + hashString(pass, "SHA-256"));
 	}

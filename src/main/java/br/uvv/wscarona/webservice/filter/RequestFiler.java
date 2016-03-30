@@ -63,7 +63,7 @@ public class RequestFiler implements ContainerRequestFilter{
 			status = Status.FORBIDDEN; 
 		}else{
 			try {
-				loginDAO.validateToken(token);
+				BaseWebService.setStudentContext(loginDAO.validateToken(token));
 			} catch (ListMessageException e) {
 				list = e;
 				status = Status.FORBIDDEN;
