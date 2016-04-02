@@ -11,6 +11,7 @@ import com.google.gson.GsonBuilder;
 
 import br.uvv.wscarona.model.Student;
 import br.uvv.wscarona.webservice.util.ListMessageException;
+import br.uvv.wscarona.webservice.util.MessageBundle;
 
 @Consumes({MediaType.APPLICATION_JSON})
 @Produces({MediaType.APPLICATION_JSON})
@@ -24,20 +25,33 @@ public class BaseWebService {
 		this.erros = new ListMessageException();
 	}
 	
-	protected Response successRequest() {
-		return Response.ok().build();
+	protected void addError(String key){
+		MessageBundle.addError(key, this.erros);
 	}
 	
-	protected Response successRequest(Object object) {
-		return Response.ok(gson.toJson(object)).build();
+	protected void addRquiredField(String key){
+		MessageBundle.addRquiredField(key, this.erros);
 	}
 	
-	protected Response badRequest() {
-		return badRequest(this.erros);
+	protected Response response(Status status, Object entity){
+		return Response.status(status).entity(gson.toJson(entity)).build();
 	}
 	
-	protected Response badRequest(ListMessageException erros) {
-		return Response.status(Status.BAD_REQUEST).entity(gson.toJson(erros)).build();
+	protected Response responseOk(Object entity){
+		return Response.ok(gson.toJson(entity)).build();
+	}
+	
+	protected Response responseBadRequest(Object entity){
+		return response(Status.BAD_REQUEST, entity);
+	}
+	
+	protected Response responseBadRequest(String key){
+		addError(key);
+		return responseBadRequest();
+	}
+	
+	protected Response responseBadRequest(){
+		return response(Status.BAD_REQUEST, erros);
 	}
 	
 	public static Gson getGsonInstance() {

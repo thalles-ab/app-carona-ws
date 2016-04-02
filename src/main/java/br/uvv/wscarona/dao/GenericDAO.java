@@ -31,7 +31,14 @@ public class GenericDAO implements Serializable {
 		this.entityManager.merge(entity);
 		return entity;
 	}
-	
+
+	public boolean hasError(){
+		if(erros == null || erros.getErros().isEmpty() ){
+			return false;
+		}
+		return true;
+	}
+
 	public void throwErros() throws ListMessageException{
 		if(erros == null){
 			return ;
@@ -42,5 +49,4 @@ public class GenericDAO implements Serializable {
 			throw aux;
 		}
 	}
-
 }

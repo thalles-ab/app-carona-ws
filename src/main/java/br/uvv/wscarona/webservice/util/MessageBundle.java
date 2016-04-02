@@ -10,7 +10,7 @@ public class MessageBundle {
 	private static MessageFormat messageFormat;
 
 	public static ResourceBundle getMessagesInstace() {
-		resourceBundle = ResourceBundle.getBundle("br.uvv.wscarona.i18n.Messages", locale);
+		resourceBundle = ResourceBundle.getBundle("Messages", locale);
 		messageFormat = new MessageFormat("");
 		messageFormat.setLocale(locale);
 		return resourceBundle;

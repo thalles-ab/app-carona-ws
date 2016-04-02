@@ -11,7 +11,6 @@ import br.uvv.wscarona.model.Student;
 import br.uvv.wscarona.model.Token;
 import br.uvv.wscarona.webservice.util.AuthenticatorUtil;
 import br.uvv.wscarona.webservice.util.ListMessageException;
-import br.uvv.wscarona.webservice.util.MessageBundle;
 
 @Path("/login")
 @RequestScoped
@@ -23,17 +22,16 @@ public class LoginWebService extends BaseWebService{
 		try{
 	 		Student student = loginDAO.getStudentLogin(gson.fromJson(json, Student.class));
 			if(student == null){
-				MessageBundle.addError("error.login.password.invalid", this.erros);
-				throw erros;
+				return responseBadRequest("error.login.password.invalid");
 			}
 			
 			Token token = AuthenticatorUtil.generateToken(student.getCode());
 			token.setStudent(student);
 			loginDAO.saveOrUpdateToken(token);
 			
-			return successRequest(token);
+			return responseOk(token);
 		}catch(ListMessageException list){
-			return badRequest(list);
-		} 
+			return responseBadRequest(list);
+		}
 	}
 }
