@@ -10,6 +10,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 
 import br.uvv.wscarona.dao.StudentDAO;
+import br.uvv.wscarona.model.BaseModel;
 import br.uvv.wscarona.model.Student;
 
 @Path("/student")
@@ -21,13 +22,13 @@ public class StudentWebService extends BaseWebService {
 	@GET
 	public Response get() {
 		List<Student> list = studentDAO.getUsers();
-		return Response.ok(list).build();
+		return responseOk(list);
 	}
 
 	@POST
 	public Response save(String json) {
 		Student user = this.gson.fromJson(json, Student.class);
 		user = (Student) studentDAO.merge(user);
-		return Response.ok(user).build();
+		return responseOk((BaseModel) user);
 	}
 }
