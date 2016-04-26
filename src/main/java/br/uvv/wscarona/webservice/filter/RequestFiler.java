@@ -30,7 +30,7 @@ public class RequestFiler implements ContainerRequestFilter{
 	private static final String AUTHENTICATION_HEADER = "Authorization";
 	private static final String LANGUAGE_HEADER = "Accept-Language";
 	private static final String URL_LOGIN = "login";
-	@Inject private LoginDAO loginDAO; 
+	@Inject private LoginDAO loginDAO;
 	
 	@Override
 	public void filter(ContainerRequestContext containerRequest) throws WebApplicationException {

@@ -26,7 +26,6 @@ public class ListMessageException extends Exception{
 		this.erros.add(new MessageException(error));
 	}
 
-
 	@Expose
 	private List<MessageException> erros;
 

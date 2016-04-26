@@ -1,27 +1,23 @@
 package br.uvv.wscarona.dao;
 
 import java.util.List;
+
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
+
 import br.uvv.wscarona.model.Student;
 import br.uvv.wscarona.webservice.util.ListMessageException;
 import br.uvv.wscarona.webservice.util.MessageBundle;
-
+import com.mysql.jdbc.StringUtils;
 
 @Stateless
 public class StudentDAO extends GenericDAO {
 	/**
 	 * 
 	 */
-	private static int NameMinLenght;
-	private static int NameMaxLenght;
-	static {
-		NameMinLenght = 1;
-		NameMaxLenght = 255;
-	}
 	private static final long serialVersionUID = 1L;
 
 	@SuppressWarnings("unchecked")
@@ -32,28 +28,47 @@ public class StudentDAO extends GenericDAO {
 		return (List<Student>) query.getResultList();
 	}
 
-	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public Student Save(Student entity) throws ListMessageException {
-		//TODO - Validações
-		try{
-			entity.setName(entity.getName().trim());
-			entity.setPhoto(entity.getPhoto().trim());
-			ValidateName(entity.getName());
-			throwErros();
-			entityManager.merge(entity);
-			return entity;
-		}
-		catch (NoResultException e){
-			return null;
-		}
-	}
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public Student SaveOrUpdate(Student student) throws ListMessageException{
+        try{
+            fullValidation(student);
+            this.throwErros();
+            this.merge(student);
+        }catch(NoResultException e){
+            return null;
+        }
+        return student;
+    }
 
-	private void ValidateName(String name){
-		if(name.length()< NameMinLenght ){
-			MessageBundle.addRquiredField("Tamanho mínimo não foi alcançado.", erros);
-		}
-		if(name.length()> NameMaxLenght){
-			MessageBundle.addRquiredField("Tamanho mínimo não foi alcançado.", erros);
-		}
-	}
+    public void fullValidation(Student student){
+        if(StringUtils.isEmptyOrWhitespaceOnly(student.getCode())){
+            MessageBundle.addRquiredField("attr.student.code", erros);
+        }
+        if(student.getCode().length()>255){
+            MessageBundle.addMaxLengthError("attr.student.code", erros);
+        }
+        if(StringUtils.isEmptyOrWhitespaceOnly(student.getName())){
+            MessageBundle.addRquiredField("attr.student.name", erros);
+        }
+        if(student.getName().length()>255){
+            MessageBundle.addMaxLengthError("attr.student.name", erros);
+        }
+        if(student.getPhoto()!=null){
+            if(StringUtils.isEmptyOrWhitespaceOnly(student.getPhoto())){
+                MessageBundle.addRquiredField("attr.student.photo", erros);
+            }
+            if(student.getPhoto().length()>255){
+                MessageBundle.addMaxLengthError("attr.student.photo", erros);
+            }
+        }
+        if(StringUtils.isEmptyOrWhitespaceOnly(student.getPassword())){
+            MessageBundle.addRquiredField("attr.student.password", erros);
+        }
+        if(student.getPassword().length()>255) {
+            MessageBundle.addMaxLengthError("attr.password", erros);
+        }
+        if(student.getPassword().length()<6) {
+            MessageBundle.addMinLengthError("attr.password", erros);
+        }
+    }
 }

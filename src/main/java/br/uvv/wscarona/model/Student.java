@@ -9,6 +9,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.google.gson.annotations.Expose;
+import com.mysql.jdbc.StringUtils;
 
 @Entity
 @Table(name = "TBL_STUDENT")

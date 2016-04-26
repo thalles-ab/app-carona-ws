@@ -25,6 +25,17 @@ public class MessageBundle {
 		addError("error.required.field", list, params);
 	}
 
+	public static void addMaxLengthError(String keyField, ListMessageException list) {
+		Object[] params = new String[]{resourceBundle.getString(keyField)};
+		addError("error.maxlength.field", list, params);
+	}
+
+	public static void addMinLengthError(String keyField, ListMessageException list) {
+		Object[] params = new String[]{resourceBundle.getString(keyField)};
+		addError("error.minlength.field", list, params);
+	}
+
+
 	public static void addError(String keyMsg, ListMessageException list, Object... params) {
 		messageFormat.applyPattern(resourceBundle.getString(keyMsg));
 		list.getErros().add(new MessageException(messageFormat.format(params)));

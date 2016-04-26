@@ -19,6 +19,7 @@ public class BaseApplication extends Application {
         classes.add(RequestFiler.class);
         classes.add(StudentWebService.class);
         classes.add(LoginWebService.class);
+        classes.add(PlaceWebService.class);
         return classes;
     }
  

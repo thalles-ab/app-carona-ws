@@ -24,7 +24,6 @@ public class Token extends BaseModel {
 
 	@JoinColumn(name = "ID_STUDENT")
 	@OneToOne(fetch = FetchType.LAZY)
-	@Expose(deserialize=false, serialize=false)
 	private Student student;
 
 	@Column(name = "DS_TOKEN")

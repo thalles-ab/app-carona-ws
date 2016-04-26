@@ -26,7 +26,7 @@ public class LoginDAO extends GenericDAO {
 	private static final String SELECT_STUDENT_FOR_LOGIN = "SELECT st FROM Student st WHERE st.code = :code AND st.password = :password";
 	private static final String SELECT_TOKEN_FOR_STUDENT = "SELECT tk FROM Token tk WHERE tk.student.id = :idStudent ";
 	private static final String SELECT_STUDENT_TOKEN = "SELECT st FROM Token tk JOIN tk.student st WHERE tk.token = :token ";
- 
+
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public Student getStudentLogin(Student student) throws ListMessageException {
 		try{

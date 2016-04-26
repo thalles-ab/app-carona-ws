@@ -2,12 +2,14 @@ package br.uvv.wscarona.dao;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import br.uvv.wscarona.model.BaseModel;
 import br.uvv.wscarona.webservice.util.ListMessageException;
 
 public class GenericDAO implements Serializable {
@@ -27,26 +29,25 @@ public class GenericDAO implements Serializable {
 	}
 
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public Object merge(Object entity) {
+	public BaseModel merge(BaseModel entity) {
 		this.entityManager.merge(entity);
 		return entity;
 	}
 
-	public boolean hasError(){
-		if(erros == null || erros.getErros().isEmpty() ){
-			return false;
-		}
-		return true;
+	@TransactionAttribute(TransactionAttributeType.REQUIRED)
+	public BaseModel searchById(BaseModel entity){
+		return entityManager.find(entity.getClass(), entity.getId());
 	}
 
 	public void throwErros() throws ListMessageException{
 		if(erros == null){
 			return ;
 		}
-		if(erros.getErros().isEmpty() == false){
+		if(!erros.getErros().isEmpty()){
 			ListMessageException aux = new ListMessageException(erros.getErros());
 			erros.setErros(new ArrayList<>());
 			throw aux;
 		}
 	}
+
 }
