@@ -26,7 +26,7 @@ public class RideDAO extends GenericDAO {
         try{
             FullValidation(ride);
             this.throwErros();
-            this.merge(ride);
+            this.entityManager.merge(ride);
         }
         catch (NoResultException e) {
             return null;

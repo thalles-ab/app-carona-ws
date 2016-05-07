@@ -1,15 +1,9 @@
 package br.uvv.wscarona.model;
 
-import java.io.Serializable;
-
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.Version;
-
 import com.google.gson.annotations.Expose;
+
+import javax.persistence.*;
+import java.io.Serializable;
 
 @MappedSuperclass
 public class BaseModel implements Serializable {
@@ -21,6 +15,7 @@ public class BaseModel implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Expose(deserialize = true, serialize = true)
 	@Column(name = "ID")
 	private Long id;
 

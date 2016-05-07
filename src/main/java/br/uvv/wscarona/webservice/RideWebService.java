@@ -25,7 +25,6 @@ public class RideWebService extends BaseWebService {
         Ride ride = this.gson.fromJson(json, Ride.class);
         try {
             ride.setStudent(this.studentContext);
-            System.out.println(this.studentContext.getCode() + "Teste");
             ride.setCreationDate(new Date());
             rideDAO.SaveOrUpdate(ride);
             return successRequest(ride);
