@@ -46,6 +46,20 @@ public class Ride extends BaseModel {
 	@Column(name = "QT_PASSENGERS")
 	@Expose(deserialize = true, serialize = true)
 	private int quantityPassengers;
+	
+	@Column(name = "DS_ROUTE_GOOGLE_FORMAT")
+	@Expose(deserialize = true, serialize = true)
+	private String routeGoogleFormat;
+	
+	@JoinColumn(name = "ID_PLACE_START")
+	@ManyToOne(fetch = FetchType.LAZY, targetEntity = Place.class)
+	@Expose(deserialize = true, serialize = true)
+	private Place startPoint;
+
+	@JoinColumn(name = "ID_PLACE_END")
+	@ManyToOne(fetch = FetchType.LAZY, targetEntity = Place.class)
+	@Expose(deserialize = true, serialize = true)
+	private Place endPoint;
 
 	public Student getStudent() {
 		return student;
@@ -85,5 +99,29 @@ public class Ride extends BaseModel {
 
 	public void setQuantityPassengers(int quantityPassengers) {
 		this.quantityPassengers = quantityPassengers;
+	}
+
+	public String getRouteGoogleFormat() {
+		return routeGoogleFormat;
+	}
+
+	public void setRouteGoogleFormat(String routeGoogleFormat) {
+		this.routeGoogleFormat = routeGoogleFormat;
+	}
+
+	public Place getStartPoint() {
+		return startPoint;
+	}
+
+	public void setStartPoint(Place startPoint) {
+		this.startPoint = startPoint;
+	}
+
+	public Place getEndPoint() {
+		return endPoint;
+	}
+
+	public void setEndPoint(Place endPoint) {
+		this.endPoint = endPoint;
 	}
 }

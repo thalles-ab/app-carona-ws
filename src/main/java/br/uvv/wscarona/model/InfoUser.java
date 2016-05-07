@@ -15,8 +15,8 @@ import javax.persistence.TemporalType;
 import com.google.gson.annotations.Expose;
 
 @Entity
-@Table(name = "TBL_TOKEN")
-public class Token extends BaseModel {
+@Table(name = "TBL_INFO_USER")
+public class InfoUser extends BaseModel {
 	/**
 	 * 
 	 */
@@ -31,8 +31,12 @@ public class Token extends BaseModel {
 	private String token;
 
 	@Temporal(value = TemporalType.TIMESTAMP)
-	@Column(name = "DT_EXPIRATION")
-	private Date expirationDate;
+	@Column(name = "DT_EXPIRATION_TOKEN")
+	private Date expirationToken;
+	
+	@Column(name = "DS_DISPOSITIVE")
+	@Expose(deserialize = false, serialize = false)
+	private String dispositive;
 
 	public String getToken() {
 		return token;
@@ -42,14 +46,6 @@ public class Token extends BaseModel {
 		this.token = token;
 	}
 
-	public Date getExpirationDate() {
-		return expirationDate;
-	}
-
-	public void setExpirationDate(Date expirationDate) {
-		this.expirationDate = expirationDate;
-	}
-
 	public Student getStudent() {
 		return student;
 	}
@@ -57,6 +53,21 @@ public class Token extends BaseModel {
 	public void setStudent(Student student) {
 		this.student = student;
 	}
-	
+
+	public String getDispositive() {
+		return dispositive;
+	}
+
+	public void setDispositive(String dispositive) {
+		this.dispositive = dispositive;
+	}
+
+	public Date getExpirationToken() {
+		return expirationToken;
+	}
+
+	public void setExpirationToken(Date expirationToken) {
+		this.expirationToken = expirationToken;
+	}
 	
 }

@@ -1,29 +1,31 @@
 package br.uvv.wscarona.model;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
 import com.google.gson.annotations.Expose;
 
 @Entity
-@Table(name = "TBL_NOTIFICATION")
-public class Notification extends BaseModel {
+@Table(name = "TBL_SOLICITATION_RIDE")
+public class SolicitationRide  extends BaseModel{
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
+	
 	@JoinColumn(name = "ID_STUDENT")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@Expose(deserialize = true, serialize = true)
 	private Student student;
-
-	@Column(name = "DS_DISPOSITIVE")
+	
+	@JoinColumn(name = "ID_RIDE")
+	@ManyToOne(fetch = FetchType.LAZY)
 	@Expose(deserialize = true, serialize = true)
-	private String dispositive;
+	private Ride ride;
 
 	public Student getStudent() {
 		return student;
@@ -33,11 +35,11 @@ public class Notification extends BaseModel {
 		this.student = student;
 	}
 
-	public String getDispositive() {
-		return dispositive;
+	public Ride getRide() {
+		return ride;
 	}
 
-	public void setDispositive(String dispositive) {
-		this.dispositive = dispositive;
+	public void setRide(Ride ride) {
+		this.ride = ride;
 	}
 }

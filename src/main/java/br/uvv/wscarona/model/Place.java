@@ -6,7 +6,9 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
 import com.google.gson.annotations.Expose;
+
 import br.uvv.wscarona.model.enumerator.TypePlace;
 
 @Entity
@@ -21,10 +23,18 @@ public class Place extends BaseModel {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@Expose(deserialize = true, serialize = true)
 	private Student student;
-
-	@Column(name = "DS_GEOLOCALIZATION")
+	
+	@Column(name = "DS_LATITUDE")
 	@Expose(deserialize = true, serialize = true)
-	private String geoLocalization;
+	private String latitude;
+	
+	@Column(name = "DS_LONGITUDE")
+	@Expose(deserialize = true, serialize = true)
+	private String longitude;
+	
+	@Column(name = "DS_DESCRIPTION")
+	@Expose(deserialize = true, serialize = true)
+	private String description;
 
 	@Column(name = "TP_PLACE")
 	@Expose(deserialize = true, serialize = true)
@@ -38,12 +48,28 @@ public class Place extends BaseModel {
 		this.student = student;
 	}
 
-	public String getGeoLocalization() {
-		return geoLocalization;
+	public String getLatitude() {
+		return latitude;
 	}
 
-	public void setGeoLocalization(String geoLocalization) {
-		this.geoLocalization = geoLocalization;
+	public void setLatitude(String latitude) {
+		this.latitude = latitude;
+	}
+
+	public String getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(String longitude) {
+		this.longitude = longitude;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public TypePlace getPlaceType() {
@@ -52,5 +78,5 @@ public class Place extends BaseModel {
 
 	public void setPlaceType(TypePlace placeType) {
 		this.placeType = placeType;
-	}
+	}	
 }

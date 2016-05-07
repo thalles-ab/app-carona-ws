@@ -9,7 +9,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.google.gson.annotations.Expose;
-import com.mysql.jdbc.StringUtils;
 
 @Entity
 @Table(name = "TBL_STUDENT")
@@ -36,6 +35,14 @@ public class Student extends BaseModel {
 	@Expose(deserialize = true, serialize = true)
 	private String photo;
 
+	@Column(name = "DS_EMAIL")
+	@Expose(deserialize = true, serialize = true)
+	private String email;
+	
+	@Column(name = "DS_CELL_PHONE")
+	@Expose(deserialize = true, serialize = true)
+	private String cellPhone;
+	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "student")
 	private List<Ride> listRide;
 
@@ -69,5 +76,29 @@ public class Student extends BaseModel {
 
 	public void setCode(String code) {
 		this.code = code;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getCellPhone() {
+		return cellPhone;
+	}
+
+	public void setCellPhone(String cellPhone) {
+		this.cellPhone = cellPhone;
+	}
+
+	public List<Ride> getListRide() {
+		return listRide;
+	}
+
+	public void setListRide(List<Ride> listRide) {
+		this.listRide = listRide;
 	}
 }

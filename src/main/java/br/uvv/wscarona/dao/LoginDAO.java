@@ -12,7 +12,7 @@ import javax.persistence.Query;
 import com.mysql.jdbc.StringUtils;
 
 import br.uvv.wscarona.model.Student;
-import br.uvv.wscarona.model.Token;
+import br.uvv.wscarona.model.InfoUser;
 import br.uvv.wscarona.webservice.util.AuthenticatorUtil;
 import br.uvv.wscarona.webservice.util.ListMessageException;
 import br.uvv.wscarona.webservice.util.MessageBundle;
@@ -60,7 +60,7 @@ public class LoginDAO extends GenericDAO {
 	}
 	
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public Token saveOrUpdateToken(Token token) throws ListMessageException {
+	public InfoUser saveOrUpdateToken(InfoUser token) throws ListMessageException {
 		try{
 			// VALIDAÇÕES
 			if (token == null) {
@@ -78,15 +78,15 @@ public class LoginDAO extends GenericDAO {
 			StringBuilder hql = new StringBuilder(SELECT_TOKEN_FOR_STUDENT);
 			Query query = this.entityManager.createQuery(hql.toString());
 			query.setParameter("idStudent", token.getStudent().getId());
-			Token aux = (Token) query.getSingleResult();
+			InfoUser aux = (InfoUser) query.getSingleResult();
 			
 			this.entityManager.detach(aux);
 			aux.setToken(token.getToken());
-			aux.setExpirationDate(token.getExpirationDate());
+			aux.setExpirationToken(token.getExpirationToken());
 			token = aux;
 		}catch(NoResultException e){
 		}
-		return (Token) merge(token);
+		return (InfoUser) merge(token);
 	}
 
 	public Student validateToken(String token) throws ListMessageException {

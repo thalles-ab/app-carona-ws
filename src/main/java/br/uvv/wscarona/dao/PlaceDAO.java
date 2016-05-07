@@ -1,5 +1,6 @@
 package br.uvv.wscarona.dao;
 import java.util.List;
+
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;

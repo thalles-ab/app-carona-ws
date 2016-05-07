@@ -8,7 +8,7 @@ import javax.ws.rs.core.Response;
 
 import br.uvv.wscarona.dao.LoginDAO;
 import br.uvv.wscarona.model.Student;
-import br.uvv.wscarona.model.Token;
+import br.uvv.wscarona.model.InfoUser;
 import br.uvv.wscarona.webservice.util.AuthenticatorUtil;
 import br.uvv.wscarona.webservice.util.ListMessageException;
 import br.uvv.wscarona.webservice.util.MessageBundle;
@@ -27,7 +27,7 @@ public class LoginWebService extends BaseWebService{
 				throw erros;
 			}
 
-			Token token = AuthenticatorUtil.generateToken(student.getCode());
+			InfoUser token = AuthenticatorUtil.generateToken(student.getCode());
 			token.setStudent(student);
 			loginDAO.saveOrUpdateToken(token);
 			

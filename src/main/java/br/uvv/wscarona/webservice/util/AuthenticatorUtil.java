@@ -12,19 +12,19 @@ import org.apache.commons.codec.binary.Base64;
 
 import com.mysql.jdbc.StringUtils;
 
-import br.uvv.wscarona.model.Token;
+import br.uvv.wscarona.model.InfoUser;
 
 public class AuthenticatorUtil {
 	
-	public static Token generateToken(String code) throws ListMessageException{
+	public static InfoUser generateToken(String code) throws ListMessageException{
 		if(StringUtils.isNullOrEmpty(code)){
 			throw new ListMessageException("error.no.code");
 		}
 		
-		Token token = new Token();
+		InfoUser token = new InfoUser();
 		Calendar calendar = Calendar.getInstance();
 		calendar.add(Calendar.DAY_OF_MONTH, 30);
-		token.setExpirationDate(calendar.getTime());
+		token.setExpirationToken(calendar.getTime());
 		
 		String aux = UUID.randomUUID().toString();
 		aux += "-" + code + "-" + Instant.now();
