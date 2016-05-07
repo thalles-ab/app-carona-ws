@@ -68,8 +68,11 @@ public class LoginDAO extends GenericDAO {
 				if(token.getStudent() == null){
 					this.erros.addError("error.no.student");
 				}
-				else if(token.getStudent().getCode() == null){
-					this.erros.addError("error.no.code");
+				else if(StringUtils.isNullOrEmpty(token.getStudent().getCode())){
+					this.erros.addRquiredField("attr.student.code");
+				}
+				else if(StringUtils.isNullOrEmpty(token.getStudent().getPassword())){
+					this.erros.addRquiredField("attr.student.password");
 				}
 			}
 			this.throwErros(); // LANÇA OS ERROS CASO EXISTAM
