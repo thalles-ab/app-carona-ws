@@ -1,8 +1,6 @@
 package br.uvv.wscarona.dao;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Objects;
 
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
@@ -45,7 +43,7 @@ public class GenericDAO implements Serializable {
 		}
 		if(!erros.getErros().isEmpty()){
 			ListMessageException aux = new ListMessageException(erros.getErros());
-			erros.setErros(new ArrayList<>());
+			erros.clear();
 			throw aux;
 		}
 	}

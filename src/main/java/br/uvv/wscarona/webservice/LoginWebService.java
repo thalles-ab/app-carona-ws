@@ -7,11 +7,10 @@ import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 
 import br.uvv.wscarona.dao.LoginDAO;
-import br.uvv.wscarona.model.Student;
 import br.uvv.wscarona.model.InfoUser;
+import br.uvv.wscarona.model.Student;
 import br.uvv.wscarona.webservice.util.AuthenticatorUtil;
 import br.uvv.wscarona.webservice.util.ListMessageException;
-import br.uvv.wscarona.webservice.util.MessageBundle;
 
 @Path("/login")
 @RequestScoped
@@ -23,7 +22,7 @@ public class LoginWebService extends BaseWebService{
 		try{
 			Student student = loginDAO.getStudentLogin(gson.fromJson(json, Student.class));
 			if(student == null){
-				MessageBundle.addError("error.login.password.invalid", this.erros);
+				this.erros.addError("error.login.password.invalid");
 				throw erros;
 			}
 
