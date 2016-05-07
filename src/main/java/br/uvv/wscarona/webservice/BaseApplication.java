@@ -1,5 +1,7 @@
 package br.uvv.wscarona.webservice;
 
+import br.uvv.wscarona.webservice.filter.RequestFiler;
+
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 import java.util.HashMap;
@@ -9,6 +11,17 @@ import java.util.Set;
 
 @ApplicationPath("/api")
 public class BaseApplication extends Application {
+
+    @Override
+    public Set<Class<?>> getClasses() {
+        final Set<Class<?>> classes = new HashSet<Class<?>>();
+        classes.add(RequestFiler.class);
+        classes.add(StudentWebService.class);
+        classes.add(LoginWebService.class);
+        classes.add(PlaceWebService.class);
+        classes.add(RideWebService.class);
+        return classes;
+    }
 
     @Override
     public Set<Object> getSingletons() {
