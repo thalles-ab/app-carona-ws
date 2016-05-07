@@ -15,29 +15,14 @@ public class MessageBundle {
 		messageFormat.setLocale(locale);
 		return resourceBundle;
 	}
-
-	public static void addError(String keyMsg, ListMessageException list) {
-		list.getErros().add(new MessageException(resourceBundle.getString(keyMsg)));
+	
+	public static String getMessage(String key){
+		return resourceBundle.getString(key);
 	}
 	
-	public static void addRquiredField(String keyField, ListMessageException list) {
-		Object[] params = new String[]{resourceBundle.getString(keyField)};
-		addError("error.required.field", list, params);
+	public static String getMessage(String key, Object... params){
+		messageFormat.applyPattern(resourceBundle.getString(key));
+		return messageFormat.format(params);
 	}
-
-	public static void addMaxLengthError(String keyField, ListMessageException list) {
-		Object[] params = new String[]{resourceBundle.getString(keyField)};
-		addError("error.maxlength.field", list, params);
-	}
-
-	public static void addMinLengthError(String keyField, ListMessageException list) {
-		Object[] params = new String[]{resourceBundle.getString(keyField)};
-		addError("error.minlength.field", list, params);
-	}
-
-
-	public static void addError(String keyMsg, ListMessageException list, Object... params) {
-		messageFormat.applyPattern(resourceBundle.getString(keyMsg));
-		list.getErros().add(new MessageException(messageFormat.format(params)));
-	}
+	
 }

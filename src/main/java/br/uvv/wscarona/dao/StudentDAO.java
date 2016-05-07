@@ -8,10 +8,10 @@ import javax.ejb.TransactionAttributeType;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
+import com.mysql.jdbc.StringUtils;
+
 import br.uvv.wscarona.model.Student;
 import br.uvv.wscarona.webservice.util.ListMessageException;
-import br.uvv.wscarona.webservice.util.MessageBundle;
-import com.mysql.jdbc.StringUtils;
 
 @Stateless
 public class StudentDAO extends GenericDAO {
@@ -42,33 +42,33 @@ public class StudentDAO extends GenericDAO {
 
     public void fullValidation(Student student){
         if(StringUtils.isEmptyOrWhitespaceOnly(student.getCode())){
-            MessageBundle.addRquiredField("attr.student.code", erros);
+            this.erros.addRquiredField("attr.student.code");
         }
         if(student.getCode().length()>255){
-            MessageBundle.addMaxLengthError("attr.student.code", erros);
+            this.erros.addMaxLengthError("attr.student.code");
         }
         if(StringUtils.isEmptyOrWhitespaceOnly(student.getName())){
-            MessageBundle.addRquiredField("attr.student.name", erros);
+            this.erros.addRquiredField("attr.student.name");
         }
         if(student.getName().length()>255){
-            MessageBundle.addMaxLengthError("attr.student.name", erros);
+            this.erros.addMaxLengthError("attr.student.name");
         }
         if(student.getPhoto()!=null){
             if(StringUtils.isEmptyOrWhitespaceOnly(student.getPhoto())){
-                MessageBundle.addRquiredField("attr.student.photo", erros);
+                this.erros.addRquiredField("attr.student.photo");
             }
             if(student.getPhoto().length()>255){
-                MessageBundle.addMaxLengthError("attr.student.photo", erros);
+                this.erros.addMaxLengthError("attr.student.photo");
             }
         }
         if(StringUtils.isEmptyOrWhitespaceOnly(student.getPassword())){
-            MessageBundle.addRquiredField("attr.student.password", erros);
+            this.erros.addRquiredField("attr.student.password");
         }
         if(student.getPassword().length()>255) {
-            MessageBundle.addMaxLengthError("attr.password", erros);
+            this.erros.addMaxLengthError("attr.password");
         }
         if(student.getPassword().length()<6) {
-            MessageBundle.addMinLengthError("attr.password", erros);
+            this.erros.addMinLengthError("attr.password");
         }
     }
 }

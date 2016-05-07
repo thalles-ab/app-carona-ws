@@ -11,11 +11,10 @@ import javax.persistence.Query;
 
 import com.mysql.jdbc.StringUtils;
 
-import br.uvv.wscarona.model.Student;
 import br.uvv.wscarona.model.InfoUser;
+import br.uvv.wscarona.model.Student;
 import br.uvv.wscarona.webservice.util.AuthenticatorUtil;
-import br.uvv.wscarona.webservice.util.ListMessageException;
-import br.uvv.wscarona.webservice.util.MessageBundle;
+import br.uvv.wscarona.webservice.util.ListMessageException;;
 
 @Stateless
 public class LoginDAO extends GenericDAO {
@@ -24,22 +23,22 @@ public class LoginDAO extends GenericDAO {
 	 */
 	private static final long serialVersionUID = 1L;
 	private static final String SELECT_STUDENT_FOR_LOGIN = "SELECT st FROM Student st WHERE st.code = :code AND st.password = :password";
-	private static final String SELECT_TOKEN_FOR_STUDENT = "SELECT tk FROM Token tk WHERE tk.student.id = :idStudent ";
-	private static final String SELECT_STUDENT_TOKEN = "SELECT st FROM Token tk JOIN tk.student st WHERE tk.token = :token ";
+	private static final String SELECT_TOKEN_FOR_STUDENT = "SELECT tk FROM InfoUser tk WHERE tk.student.id = :idStudent ";
+	private static final String SELECT_STUDENT_TOKEN = "SELECT st FROM InfoUser tk JOIN tk.student st WHERE tk.token = :token ";
 
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public Student getStudentLogin(Student student) throws ListMessageException {
 		try{
 			// VALIDAÇÕES
 			if (student == null) {
-				MessageBundle.addRquiredField("attr.student.code", erros);
-				MessageBundle.addRquiredField("attr.password", erros);
+				this.erros.addRquiredField("attr.student.code");
+				this.erros.addRquiredField("attr.password");
 			} else {
 				if (student.getCode() == null) {
-					MessageBundle.addRquiredField("attr.student.code", erros);
+					this.erros.addRquiredField("attr.student.code");
 				}
 				if (StringUtils.isNullOrEmpty(student.getPassword())) {
-					MessageBundle.addRquiredField("attr.password", erros);
+					this.erros.addRquiredField("attr.password");
 				}
 			}
 			this.throwErros(); // LANÇA OS ERROS CASO EXISTAM
@@ -64,13 +63,13 @@ public class LoginDAO extends GenericDAO {
 		try{
 			// VALIDAÇÕES
 			if (token == null) {
-				MessageBundle.addError("error.no.token", erros);
+				this.erros.addError("error.no.token");
 			} else {
 				if(token.getStudent() == null){
-					MessageBundle.addError("error.no.student", erros);
+					this.erros.addError("error.no.student");
 				}
 				else if(token.getStudent().getCode() == null){
-					MessageBundle.addError("error.no.code", erros);
+					this.erros.addError("error.no.code");
 				}
 			}
 			this.throwErros(); // LANÇA OS ERROS CASO EXISTAM
@@ -93,7 +92,7 @@ public class LoginDAO extends GenericDAO {
 		try{
 			// VALIDAÇÕES
 			if (token == null) {
-				MessageBundle.addError("error.no.token", erros);
+				this.erros.addError("error.no.token");
 			} 
 			this.throwErros(); // LANÇA OS ERROS CASO EXISTAM
 	
@@ -102,7 +101,7 @@ public class LoginDAO extends GenericDAO {
 			query.setParameter("token", token);
 			return (Student) query.getSingleResult();
 		}catch(NoResultException e){
-			MessageBundle.addError("error.invalid.token", erros);
+			this.erros.addError("error.invalid.token");
 			this.throwErros();
 			return null;
 		}
