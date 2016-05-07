@@ -50,7 +50,7 @@ public class ListMessageException extends Exception {
 	}
 	
 	public void clear(){
-		this.getErros().clear();
+		this.erros = new ArrayList<>();
 	}
 
 	public List<MessageException> getErros() {
