@@ -15,6 +15,7 @@ import javax.persistence.TemporalType;
 import com.google.gson.annotations.Expose;
 
 import br.uvv.wscarona.model.enumerator.TypeDay;
+import br.uvv.wscarona.model.enumerator.TypeSituation;
 
 @Entity
 @Table(name = "TBL_RIDE")
@@ -60,6 +61,14 @@ public class Ride extends BaseModel {
 	@ManyToOne(fetch = FetchType.LAZY, targetEntity = Place.class)
 	@Expose(deserialize = true, serialize = true)
 	private Place endPoint;
+	
+	@Column(name = "FL_SHOW_CELL_PHONE")
+	@Expose(deserialize = true, serialize = true)
+	private boolean showCellPhone;
+	
+	@Column(name = "TP_SITUATION")
+	@Expose(deserialize = true, serialize = true)
+	private TypeSituation situation;
 
 	public Student getStudent() {
 		return student;
@@ -123,5 +132,21 @@ public class Ride extends BaseModel {
 
 	public void setEndPoint(Place endPoint) {
 		this.endPoint = endPoint;
+	}
+
+	public boolean isShowCellPhone() {
+		return showCellPhone;
+	}
+
+	public void setShowCellPhone(boolean showCellPhone) {
+		this.showCellPhone = showCellPhone;
+	}
+
+	public TypeSituation getSituation() {
+		return situation;
+	}
+
+	public void setSituation(TypeSituation situation) {
+		this.situation = situation;
 	}
 }

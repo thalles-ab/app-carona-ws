@@ -1,12 +1,14 @@
 package br.uvv.wscarona.webservice;
 
 import java.util.List;
+
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
+
 import br.uvv.wscarona.dao.StudentDAO;
 import br.uvv.wscarona.model.Student;
 import br.uvv.wscarona.webservice.util.ListMessageException;
@@ -30,8 +32,21 @@ public class StudentWebService extends BaseWebService {
 		try{
 			contextUser.setPhoto(user.getPhoto());
 			contextUser.setName(user.getName());
-			studentDAO.SaveOrUpdate(contextUser);
+			contextUser.setEmail(user.getEmail());
+			contextUser.setCellPhone(user.getCellPhone());
+			studentDAO.saveOrUpdate(contextUser);
 			return successRequest(contextUser);
+		}catch(ListMessageException list){
+			return badRequest(list);
+		}
+	}
+	
+	@POST
+	@Path("/lostPassword")
+	public Response lostPassword() {
+		try{
+			studentDAO.lostPassword(BaseWebService.studentContext);
+			return successRequest();
 		}catch(ListMessageException list){
 			return badRequest(list);
 		}

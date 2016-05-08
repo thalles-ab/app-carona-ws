@@ -1,5 +1,6 @@
 package br.uvv.wscarona.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -26,6 +27,10 @@ public class StudentRide  extends BaseModel{
 	@ManyToOne(fetch = FetchType.LAZY)
 	@Expose(deserialize = true, serialize = true)
 	private Ride ride;
+	
+	@Column(name = "FL_SHOW_CELL_PHONE")
+	@Expose(deserialize = true, serialize = true)
+	private boolean showCellPhone;
 
 	public Student getStudent() {
 		return student;
@@ -41,6 +46,14 @@ public class StudentRide  extends BaseModel{
 
 	public void setRide(Ride ride) {
 		this.ride = ride;
+	}
+
+	public boolean isShowCellPhone() {
+		return showCellPhone;
+	}
+
+	public void setShowCellPhone(boolean showCellPhone) {
+		this.showCellPhone = showCellPhone;
 	}
 	
 }

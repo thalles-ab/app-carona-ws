@@ -45,6 +45,10 @@ public class Student extends BaseModel {
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "student")
 	private List<Ride> listRide;
+	
+	@Column(name = "DS_LOST_PASSWORD")
+	@Expose(deserialize = true, serialize = true)
+	private String lostPassword;
 
 	public String getPhoto() {
 		return photo;
@@ -100,5 +104,13 @@ public class Student extends BaseModel {
 
 	public void setListRide(List<Ride> listRide) {
 		this.listRide = listRide;
+	}
+
+	public String getLostPassword() {
+		return lostPassword;
+	}
+
+	public void setLostPassword(String lostPassword) {
+		this.lostPassword = lostPassword;
 	}
 }

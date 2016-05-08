@@ -1,13 +1,14 @@
 package br.uvv.wscarona.webservice;
 
-import br.uvv.wscarona.webservice.filter.RequestFiler;
-
-import javax.ws.rs.ApplicationPath;
-import javax.ws.rs.core.Application;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
+import javax.ws.rs.ApplicationPath;
+import javax.ws.rs.core.Application;
+
+import br.uvv.wscarona.webservice.filter.RequestFiler;
 
 @ApplicationPath("/api")
 public class BaseApplication extends Application {
@@ -20,6 +21,8 @@ public class BaseApplication extends Application {
         classes.add(LoginWebService.class);
         classes.add(PlaceWebService.class);
         classes.add(RideWebService.class);
+        classes.add(SolicitationRideWebService.class);
+        classes.add(StudentRideWebService.class);
         return classes;
     }
 

@@ -1,5 +1,6 @@
 package br.uvv.wscarona.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -7,6 +8,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.google.gson.annotations.Expose;
+
+import br.uvv.wscarona.model.enumerator.TypeSituation;
 
 @Entity
 @Table(name = "TBL_SOLICITATION_RIDE")
@@ -26,6 +29,9 @@ public class SolicitationRide  extends BaseModel{
 	@ManyToOne(fetch = FetchType.LAZY)
 	@Expose(deserialize = true, serialize = true)
 	private Ride ride;
+	
+	@Column(name = "TP_SITUATION")
+	private TypeSituation situation;
 
 	public Student getStudent() {
 		return student;
@@ -41,5 +47,13 @@ public class SolicitationRide  extends BaseModel{
 
 	public void setRide(Ride ride) {
 		this.ride = ride;
+	}
+
+	public TypeSituation getSituation() {
+		return situation;
+	}
+
+	public void setSituation(TypeSituation situation) {
+		this.situation = situation;
 	}
 }

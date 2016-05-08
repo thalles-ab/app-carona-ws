@@ -1,6 +1,7 @@
 package br.uvv.wscarona.dao;
 
 import br.uvv.wscarona.model.Ride;
+import br.uvv.wscarona.model.enumerator.TypeSituation;
 import br.uvv.wscarona.webservice.util.ListMessageException;
 import com.mysql.jdbc.StringUtils;
 
@@ -24,8 +25,9 @@ public class RideDAO extends GenericDAO {
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public Ride SaveOrUpdate(Ride ride) throws ListMessageException{
         try{
-            FullValidation(ride);
+            fullValidation(ride);
             this.throwErros();
+            ride.setSituation(TypeSituation.Enable);
             this.entityManager.merge(ride);
         }
         catch (NoResultException e) {
@@ -34,8 +36,20 @@ public class RideDAO extends GenericDAO {
         return ride;
     }
 
+    public void updateShowCellPhone(Ride rideParam) throws ListMessageException{
+		if(rideParam == null || rideParam.getId() == null){
+			this.erros.addRquiredField("attr.ride");
+		}
+		this.throwErros();
+		
+		Ride ride = (Ride) this.searchById(rideParam);
+		this.entityManager.detach(ride);
+		ride.setShowCellPhone(rideParam.isShowCellPhone());
+		System.out.println(rideParam.isShowCellPhone());
+		this.entityManager.merge(ride);
+    }
 
-    public void FullValidation(Ride ride){
+    public void fullValidation(Ride ride){
         if(ride.getExpirationDate() == null){
             this.erros.addRquiredField("attr.ride.expiration.date");
         }
@@ -52,7 +66,4 @@ public class RideDAO extends GenericDAO {
             this.erros.addRquiredField("attr.ride.end.point");
         }
     }
-
-
-
 }

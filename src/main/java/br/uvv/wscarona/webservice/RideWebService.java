@@ -33,4 +33,15 @@ public class RideWebService extends BaseWebService {
         }
     }
 
+    @POST
+    @Path("/changeShowCellPhone")
+    public Response changeShowCellPhone(String json){
+        try {
+            Ride ride = this.gson.fromJson(json, Ride.class);
+            rideDAO.updateShowCellPhone(ride);
+            return successRequest();
+        } catch (ListMessageException list) {
+            return badRequest(list);
+        }
+    }
 }

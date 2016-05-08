@@ -1,16 +1,20 @@
 package br.uvv.wscarona.webservice;
 
-import br.uvv.wscarona.dao.PlaceDAO;
-import br.uvv.wscarona.model.Place;
-import br.uvv.wscarona.model.enumerator.TypePlace;
-import br.uvv.wscarona.webservice.util.ListMessageException;
+import java.util.List;
+import java.util.Objects;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.ws.rs.*;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
-import java.util.List;
-import java.util.Objects;
+
+import br.uvv.wscarona.dao.PlaceDAO;
+import br.uvv.wscarona.model.Place;
+import br.uvv.wscarona.model.enumerator.TypeSituation;
+import br.uvv.wscarona.webservice.util.ListMessageException;
 
 @Path("/place")
 @RequestScoped
@@ -25,10 +29,10 @@ public class PlaceWebService extends BaseWebService {
             //No momento, apenas cria, pois não tem referência de PK ou UK.
             Place place = gson.fromJson(request, Place.class);
             place.setStudent(studentContext);
+            place.setSituation(TypeSituation.Enable);
             return successRequest(placeDAO.saveOrUpdate(place));
         }
-        catch (Exception e){
-            erros.addSuppressed(e);
+        catch (ListMessageException e){
             return badRequest(erros);
         }
     }

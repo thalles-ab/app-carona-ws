@@ -10,6 +10,7 @@ import javax.persistence.Table;
 import com.google.gson.annotations.Expose;
 
 import br.uvv.wscarona.model.enumerator.TypePlace;
+import br.uvv.wscarona.model.enumerator.TypeSituation;
 
 @Entity
 @Table(name = "TBL_PLACE")
@@ -39,6 +40,9 @@ public class Place extends BaseModel {
 	@Column(name = "TP_PLACE")
 	@Expose(deserialize = true, serialize = true)
 	private TypePlace placeType;
+	
+	@Column(name = "TP_SITUATION")
+	private TypeSituation situation;
 
 	public Student getStudent() {
 		return student;
@@ -78,5 +82,13 @@ public class Place extends BaseModel {
 
 	public void setPlaceType(TypePlace placeType) {
 		this.placeType = placeType;
+	}
+
+	public TypeSituation getSituation() {
+		return situation;
+	}
+
+	public void setSituation(TypeSituation situation) {
+		this.situation = situation;
 	}	
 }

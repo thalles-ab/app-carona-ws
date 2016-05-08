@@ -1,4 +1,5 @@
 package br.uvv.wscarona.dao;
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -6,8 +7,12 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.persistence.Query;
 
+import com.mysql.jdbc.StringUtils;
+
 import br.uvv.wscarona.model.Place;
+import br.uvv.wscarona.model.Ride;
 import br.uvv.wscarona.model.Student;
+import br.uvv.wscarona.webservice.util.ListMessageException;
 
 
 @Stateless
@@ -42,8 +47,9 @@ public class PlaceDAO extends GenericDAO {
     }
 
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public Place saveOrUpdate(Place place){
-        //Validar
+    public Place saveOrUpdate(Place place) throws ListMessageException{
+    	fullValidation(place);
+    	this.throwErros();
         return entityManager.merge(place);
     }
 
@@ -51,5 +57,17 @@ public class PlaceDAO extends GenericDAO {
     public void delete(String id){
         Place placeToDelete = getPlace(id);
         entityManager.remove(placeToDelete);
+    }
+    
+    public void fullValidation(Place place){
+        if(place.getLatitude() == null){
+        	this.erros.addRquiredField("attr.place.latitude");
+        }
+        if(place.getLongitude() == null){
+        	this.erros.addRquiredField("attr.place.longitude");
+        }
+        if(place.getDescription() == null){
+        	this.erros.addRquiredField("attr.place.description");
+        }
     }
 }

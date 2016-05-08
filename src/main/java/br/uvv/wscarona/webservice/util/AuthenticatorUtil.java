@@ -6,6 +6,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
 import java.util.Calendar;
+import java.util.Random;
 import java.util.UUID;
 
 import org.apache.commons.codec.binary.Base64;
@@ -36,7 +37,7 @@ public class AuthenticatorUtil {
 		return hashString(pass, "SHA-256");
 	}
 	
-	private static String hashString(String message, String alg) {
+	public static String hashString(String message, String alg) {
 	    try {
 	        MessageDigest digest = MessageDigest.getInstance(alg);
 	        byte[] hashedBytes = digest.digest(message.getBytes(StandardCharsets.UTF_8));
@@ -53,6 +54,23 @@ public class AuthenticatorUtil {
 	                .substring(1));
 	    }
 	    return stringBuffer.toString();
+	}
+	
+	public static String getPasswordRandom() {
+        String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        StringBuilder salt = new StringBuilder();
+        Random rnd = new Random();
+        while (salt.length() < 18) {
+            int index = (int) (rnd.nextFloat() * SALTCHARS.length());
+            salt.append(SALTCHARS.charAt(index));
+        }
+        String saltStr = salt.toString();
+        return saltStr;
+    }
+	
+	public static String getDbPassword(String password){
+		String pass = hashString(password, "MD5");
+		return hashString(pass, "SHA-256"); 
 	}
 	
 	// TODO REMOVER AO FINAL DO PROJETO

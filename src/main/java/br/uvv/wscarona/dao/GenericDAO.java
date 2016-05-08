@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 
 import br.uvv.wscarona.model.BaseModel;
@@ -34,7 +35,11 @@ public class GenericDAO implements Serializable {
 
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public BaseModel searchById(BaseModel entity){
-		return entityManager.find(entity.getClass(), entity.getId());
+		try{
+			return entityManager.find(entity.getClass(), entity.getId());
+		}catch(NoResultException e){
+			return null;
+		}	
 	}
 
 	public void throwErros() throws ListMessageException{

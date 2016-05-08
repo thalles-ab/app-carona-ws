@@ -11,6 +11,7 @@ import javax.persistence.Query;
 import com.mysql.jdbc.StringUtils;
 
 import br.uvv.wscarona.model.Student;
+import br.uvv.wscarona.webservice.util.AuthenticatorUtil;
 import br.uvv.wscarona.webservice.util.ListMessageException;
 
 @Stateless
@@ -29,7 +30,7 @@ public class StudentDAO extends GenericDAO {
 	}
 
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public Student SaveOrUpdate(Student student) throws ListMessageException{
+    public Student saveOrUpdate(Student student) throws ListMessageException{
         try{
             fullValidation(student);
             this.throwErros();
@@ -38,6 +39,20 @@ public class StudentDAO extends GenericDAO {
             return null;
         }
         return student;
+    }
+    
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public void lostPassword(Student studentParam) throws ListMessageException{
+	    if(studentParam == null || studentParam.getId() == null){
+	    	this.erros.addRquiredField("attr.student");
+	    }
+	    
+	    this.throwErros();
+	    
+		String newPassword = AuthenticatorUtil.getPasswordRandom();
+		studentParam.setLostPassword(AuthenticatorUtil.getDbPassword(newPassword));
+		this.merge(studentParam);
+		System.out.println(AuthenticatorUtil.hashString(newPassword, "MD5"));
     }
 
     public void fullValidation(Student student){
