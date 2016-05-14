@@ -8,6 +8,7 @@ import javax.ejb.TransactionAttributeType;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
+import br.uvv.wscarona.webservice.util.MessageBundle;
 import com.mysql.jdbc.StringUtils;
 
 import br.uvv.wscarona.model.Student;
@@ -19,6 +20,7 @@ public class StudentDAO extends GenericDAO {
 	/**
 	 * 
 	 */
+    private static final String SELECT_STUDENT_BY_EMAIL = "SELECT st FROM Student st WHERE st.email = :email";
 	private static final long serialVersionUID = 1L;
 
 	@SuppressWarnings("unchecked")
@@ -34,9 +36,19 @@ public class StudentDAO extends GenericDAO {
         try{
             fullValidation(student);
             this.throwErros();
-            this.merge(student);
+            if(student.getId()==0L){
+                StringBuilder hql = new StringBuilder(SELECT_STUDENT_BY_EMAIL);
+                Query query = this.entityManager.createQuery(hql.toString());
+                query.setParameter("email", student.getEmail());
+                query.getSingleResult();
+            }
+            else{
+                return (Student)this.merge(student);
+            }
+            this.erros.addError("error.invalid.register");
+            this.throwErros();
         }catch(NoResultException e){
-            return null;
+            this.merge(student);
         }
         return student;
     }
@@ -61,6 +73,12 @@ public class StudentDAO extends GenericDAO {
         }
         if(student.getCode().length()>255){
             this.erros.addMaxLengthError("attr.student.code");
+        }
+        if(StringUtils.isEmptyOrWhitespaceOnly(student.getEmail())){
+            this.erros.addRquiredField("attr.student.email");
+        }
+        if(student.getEmail().length()>255){
+            this.erros.addMaxLengthError("attr.student.email");
         }
         if(StringUtils.isEmptyOrWhitespaceOnly(student.getName())){
             this.erros.addRquiredField("attr.student.name");

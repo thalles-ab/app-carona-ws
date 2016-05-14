@@ -56,7 +56,7 @@ public class RequestFiler implements ContainerRequestFilter{
 		
 		// CHECK TOKEN AUTHORIZATION
 		String token = containerRequest.getHeaderString(AUTHENTICATION_HEADER);
-		if(fullUri.replace(baseUri, "").equals(URL_LOGIN) && containerRequest.getMethod().equals(HttpMethod.POST)){
+		if(fullUri.replace(baseUri, "").equals(URL_LOGIN) && containerRequest.getMethod().equals(HttpMethod.POST) || fullUri.replace(baseUri, "").equals("student/create")){
 			// TODO
 		}else if(StringUtils.isNullOrEmpty(token)){
 			list.getErros().add(new MessageException(resourceBundle.getString("error_no_token")));
