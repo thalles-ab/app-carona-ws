@@ -24,8 +24,6 @@ public class PlaceWebService extends BaseWebService {
     @POST
     public Response SaveOrUpdate(String request) throws ListMessageException {
         try{
-            //TODO - Conversão só funciona quando o enum é digitado como String (Ex: "Casa" - Como seu valor, 0, a conversão não funciona)
-            //TODO - Precisamos expor alguma chave unica (ou mesmo o ID) para termos uma referência de unicidade da tabela (necessário para update)
             //No momento, apenas cria, pois não tem referência de PK ou UK.
             Place place = gson.fromJson(request, Place.class);
             place.setStudent(studentContext);
@@ -62,20 +60,26 @@ public class PlaceWebService extends BaseWebService {
         }
     }
 
-    //Bug: Delete usando "Delete" não funciona usando parâmetros, pelo que li é um bug conhecido.
-    //TODO - Usuário poderá deletar qualquer place ou apenas os place em que seja "dono" ? (Da maneira implementada, apenas os próprios locais)
+
     @GET
     @Path("/delete/{id}")
     public Response delete(@PathParam("id") String id){
         try{
-            if(Objects.equals(placeDAO.getPlace(id).getStudent().getCode(),studentContext.getCode())){
-                placeDAO.delete(id);
+            Place place = placeDAO.getPlace(id);
+            if(place==null){
+                erros.addError("error.invalid.place");
+                throw erros;
             }
-            else{
-                throw new Exception("Só pode excluir local do domínio do usuário logado.");
+            else {
+                if(Objects.equals(place.getStudent().getCode(),studentContext.getCode())){
+                    placeDAO.delete(id);
+                }
+                else{
+                    erros.addError("error.not.allowed");
+                    throw erros;
+                }
             }
-            //TODO - Qual resposta do sucesso de delete ?
-            return successRequest("Success");
+            return successRequest();
         }
         catch (Exception e){
             return badRequest(erros);

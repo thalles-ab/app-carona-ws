@@ -7,6 +7,7 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.persistence.Query;
 
+import br.uvv.wscarona.model.enumerator.TypeSituation;
 import com.mysql.jdbc.StringUtils;
 
 import br.uvv.wscarona.model.Place;
@@ -25,9 +26,10 @@ public class PlaceDAO extends GenericDAO {
 
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public List<Place> getPlaces(Student student) {
-        StringBuilder hql = new StringBuilder("SELECT p FROM Place p WHERE p.student.id = :studentId");
+        StringBuilder hql = new StringBuilder("SELECT p FROM Place p WHERE p.student.id = :studentId and p.situation = :situation");
         Query query = this.entityManager.createQuery(hql.toString());
         query.setParameter("studentId", student.getId());
+        query.setParameter("situation", TypeSituation.Enable);
         return (List<Place>)query.getResultList();
     }
 
@@ -56,7 +58,8 @@ public class PlaceDAO extends GenericDAO {
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void delete(String id){
         Place placeToDelete = getPlace(id);
-        entityManager.remove(placeToDelete);
+        placeToDelete.setSituation(TypeSituation.Disable);
+        entityManager.merge(placeToDelete);
     }
     
     public void fullValidation(Place place){

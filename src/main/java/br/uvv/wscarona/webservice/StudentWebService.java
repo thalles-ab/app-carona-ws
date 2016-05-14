@@ -8,6 +8,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 
@@ -28,7 +29,7 @@ public class StudentWebService extends BaseWebService {
 		return successRequest(list);
 	}
 
-	@POST
+	@PUT
 	public Response save(String json) {
         Student user = this.gson.fromJson(json, Student.class);
         Student contextUser = StudentWebService.studentContext;
@@ -46,7 +47,6 @@ public class StudentWebService extends BaseWebService {
 
 
 	@POST
-    @Path("/create")
     public Response create(String json){
         Student user = this.gson.fromJson(json, Student.class);
         user.setId(0L);
