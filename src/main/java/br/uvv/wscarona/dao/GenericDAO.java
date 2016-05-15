@@ -11,7 +11,7 @@ import javax.persistence.PersistenceContext;
 import br.uvv.wscarona.model.BaseModel;
 import br.uvv.wscarona.webservice.util.ListMessageException;
 
-public class GenericDAO implements Serializable {
+public class GenericDAO<T> implements Serializable {
 
 	/**
 	 * 

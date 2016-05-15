@@ -9,7 +9,9 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.persistence.NoResultException;
+import javax.persistence.Query;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Capucho on 07/05/2016.
@@ -20,7 +22,26 @@ public class RideDAO extends GenericDAO {
      *
      */
     private static final long serialVersionUID = 1L;
+    private static final StringBuilder SELECT_RIDES_BY_LAT_LONG = new StringBuilder("SELECT ride FROM Ride ride ")
+            .append("JOIN ride.startPoint startPoint ")
+            .append("JOIN ride.endPoint endPoint ")
+            .append("WHERE startPoint.latitude like :startPointLat ")
+            .append("and startPoint.longitude like :startPointLong ")
+            .append("and endPoint.latitude like :endPointLat ")
+            .append("and endPoint.longitude like :endPointLong ")
+            .append("and ride.student.id != :studentId");
 
+    public List<Ride> searchRidesWithSameLatLong(Ride ride){
+        StringBuilder hql = new StringBuilder(SELECT_RIDES_BY_LAT_LONG);
+        Query query = this.entityManager.createQuery(hql.toString());
+        query.setParameter("startPointLat", ride.getStartPoint().getLatitude());
+        query.setParameter("startPointLong", ride.getStartPoint().getLongitude());
+        query.setParameter("endPointLat", ride.getEndPoint().getLatitude());
+        query.setParameter("endPointLong", ride.getEndPoint().getLongitude());
+        query.setParameter("studentId", ride.getStudent().getId());
+        List<Ride> results = query.getResultList();
+        return results;
+    }
 
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public Ride SaveOrUpdate(Ride ride) throws ListMessageException{

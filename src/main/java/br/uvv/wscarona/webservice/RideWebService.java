@@ -10,6 +10,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Capucho on 07/05/2016.
@@ -31,6 +32,15 @@ public class RideWebService extends BaseWebService {
         } catch (ListMessageException list) {
             return badRequest(list);
         }
+    }
+
+    @POST
+    @Path("/list")
+    public Response list(String json){
+        Ride ride = this.gson.fromJson(json, Ride.class);
+        ride.setStudent(getStudentContext());
+        List<Ride> listRides = rideDAO.searchRidesWithSameLatLong(ride);
+        return successRequest(listRides);
     }
 
     @POST
