@@ -2,10 +2,7 @@ package br.uvv.wscarona.webservice;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
 import br.uvv.wscarona.dao.SolicitationRideDAO;
@@ -42,9 +39,11 @@ public class SolicitationRideWebService extends BaseWebService{
     }
 
     @DELETE
-    public Response reject(String json) {
+    @Path("{id}")
+    public Response reject(@PathParam("id") long id) {
         try{
-            SolicitationRide solicitationRide = gson.fromJson(json, SolicitationRide.class);
+            SolicitationRide solicitationRide = new SolicitationRide();
+            solicitationRide.setId(id);
             solicitationRideDAO.reject(solicitationRide);
             return successRequest();
         }catch(ListMessageException list){
