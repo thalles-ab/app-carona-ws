@@ -74,19 +74,21 @@ public class PlaceDAO extends GenericDAO {
     }
 
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void delete(Place place) throws ListMessageException {
+    public void delete(List<Place> places) throws ListMessageException {
         try{
-            if(place.getId() == null){
-                this.erros.addError("error.invalid.place");
+            for (Place place : places) {
+                if(place.getId() == null){
+                    this.erros.addError("error.invalid.place");
+                }
+                this.throwErros();
+                StringBuilder hql = new StringBuilder("SELECT p FROM Place p WHERE p.student.id =:studentId AND p.id =:placeId");
+                Query query = this.entityManager.createQuery(hql.toString());
+                query.setParameter("studentId", place.getStudent().getId());
+                query.setParameter("placeId", place.getId());
+                Place placeToDelete = (Place) query.getSingleResult();
+                placeToDelete.setSituation(TypeSituation.DISABLE);
+                entityManager.merge(placeToDelete);
             }
-            this.throwErros();
-            StringBuilder hql = new StringBuilder("SELECT p FROM Place p WHERE p.student.id =:studentId AND p.id =:placeId");
-            Query query = this.entityManager.createQuery(hql.toString());
-            query.setParameter("studentId", place.getStudent().getId());
-            query.setParameter("placeId", place.getId());
-            Place placeToDelete = (Place) query.getSingleResult();
-            placeToDelete.setSituation(TypeSituation.DISABLE);
-            entityManager.merge(placeToDelete);
         }catch (NoResultException e){
             this.erros.addError("error.invalid.place");
         }

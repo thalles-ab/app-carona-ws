@@ -70,6 +70,10 @@ public class RideDAO extends GenericDAO {
 		this.entityManager.merge(ride);
     }
 
+//    public int quantityRides(){
+//
+//    }
+
     public void fullValidation(Ride ride){
         if(ride.getExpirationDate() == null){
             this.erros.addRquiredField("attr.ride.expiration.date");

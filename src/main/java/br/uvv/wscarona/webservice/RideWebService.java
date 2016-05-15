@@ -2,6 +2,7 @@ package br.uvv.wscarona.webservice;
 
 import br.uvv.wscarona.dao.RideDAO;
 import br.uvv.wscarona.model.Ride;
+import br.uvv.wscarona.model.enumerator.TypeSituation;
 import br.uvv.wscarona.webservice.util.ListMessageException;
 
 import javax.enterprise.context.RequestScoped;
@@ -27,6 +28,7 @@ public class RideWebService extends BaseWebService {
         try {
             ride.setStudent(this.studentContext);
             ride.setCreationDate(new Date());
+            ride.setSituation(TypeSituation.ENABLE);
             rideDAO.SaveOrUpdate(ride);
             return successRequest(ride);
         } catch (ListMessageException list) {

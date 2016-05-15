@@ -67,14 +67,12 @@ public class PlaceWebService extends BaseWebService {
         }
     }
 
-    @GET
-    @Path("/delete/{id}")
-    public Response delete(@PathParam("id") long id){
+    @POST
+    @Path("/delete")
+    public Response delete(String json){
         try{
-            Place place = new Place();
-            place.setId(id);
-            place.setStudent(studentContext);
-            this.placeDAO.delete(place);
+            List<Place> places = gson.fromJson(json, List.class);
+            this.placeDAO.delete(places);
             return successRequest();
         }
         catch (ListMessageException list){

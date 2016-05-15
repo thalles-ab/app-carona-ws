@@ -3,14 +3,7 @@ package br.uvv.wscarona.model;
 
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 
 import com.google.gson.annotations.Expose;
 
@@ -68,6 +61,7 @@ public class Ride extends BaseModel {
 	
 	@Column(name = "TP_SITUATION")
 	@Expose(deserialize = true, serialize = true)
+	@Enumerated(EnumType.ORDINAL)
 	private TypeSituation situation;
 
 	public Student getStudent() {
