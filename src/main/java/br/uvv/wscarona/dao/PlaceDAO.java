@@ -5,6 +5,7 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
 import br.uvv.wscarona.model.enumerator.TypeSituation;
@@ -49,17 +50,47 @@ public class PlaceDAO extends GenericDAO {
     }
 
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public Place saveOrUpdate(Place place) throws ListMessageException{
+    public Place create(Place place) throws ListMessageException{
     	fullValidation(place);
     	this.throwErros();
         return entityManager.merge(place);
     }
 
+    public Place update(Place place) throws ListMessageException{
+        if(place.getDescription() == null){
+            this.erros.addError("error.invalid.description");
+        }
+        this.throwErros();
+
+        Place placeAux = (Place) searchById(place);
+
+        if(placeAux == null){
+            this.erros.addError("error.invalid.place");
+        }
+        this.throwErros();
+
+        placeAux.setDescription(place.getDescription());
+        return entityManager.merge(placeAux);
+    }
+
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void delete(String id){
-        Place placeToDelete = getPlace(id);
-        placeToDelete.setSituation(TypeSituation.DISABLE);
-        entityManager.merge(placeToDelete);
+    public void delete(Place place) throws ListMessageException {
+        try{
+            if(place.getId() == null){
+                this.erros.addError("error.invalid.place");
+            }
+            this.throwErros();
+            StringBuilder hql = new StringBuilder("SELECT p FROM Place p WHERE p.student.id =:studentId AND p.id =:placeId");
+            Query query = this.entityManager.createQuery(hql.toString());
+            query.setParameter("studentId", place.getStudent().getId());
+            query.setParameter("placeId", place.getId());
+            Place placeToDelete = (Place) query.getSingleResult();
+            placeToDelete.setSituation(TypeSituation.DISABLE);
+            entityManager.merge(placeToDelete);
+        }catch (NoResultException e){
+            this.erros.addError("error.invalid.place");
+        }
+        this.throwErros();
     }
     
     public void fullValidation(Place place){

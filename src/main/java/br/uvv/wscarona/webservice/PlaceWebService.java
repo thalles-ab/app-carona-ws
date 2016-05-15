@@ -24,11 +24,18 @@ public class PlaceWebService extends BaseWebService {
     @POST
     public Response SaveOrUpdate(String request) throws ListMessageException {
         try{
-            //No momento, apenas cria, pois não tem referência de PK ou UK.
             Place place = gson.fromJson(request, Place.class);
-            place.setStudent(studentContext);
-            place.setSituation(TypeSituation.ENABLE);
-            return successRequest(placeDAO.saveOrUpdate(place));
+            if(place.getId() == null){
+                place.setStudent(studentContext);
+                place.setSituation(TypeSituation.ENABLE);
+                place = placeDAO.create(place);
+
+                Place placeAux = new Place();
+                placeAux.setId(place.getId());
+                return successRequest(placeAux);
+            }
+            place = placeDAO.update(place);
+            return successRequest();
         }
         catch (ListMessageException e){
             return badRequest(erros);
@@ -60,29 +67,18 @@ public class PlaceWebService extends BaseWebService {
         }
     }
 
-
     @GET
     @Path("/delete/{id}")
-    public Response delete(@PathParam("id") String id){
+    public Response delete(@PathParam("id") long id){
         try{
-            Place place = placeDAO.getPlace(id);
-            if(place==null){
-                erros.addError("error.invalid.place");
-                throw erros;
-            }
-            else {
-                if(Objects.equals(place.getStudent().getCode(),studentContext.getCode())){
-                    placeDAO.delete(id);
-                }
-                else{
-                    erros.addError("error.not.allowed");
-                    throw erros;
-                }
-            }
+            Place place = new Place();
+            place.setId(id);
+            place.setStudent(studentContext);
+            this.placeDAO.delete(place);
             return successRequest();
         }
-        catch (Exception e){
-            return badRequest(erros);
+        catch (ListMessageException list){
+            return badRequest(list);
         }
     }
 }
