@@ -36,7 +36,7 @@ public class PlaceWebService extends BaseWebService {
     }
 
 	@GET
-	public Response getAll(String json) {
+	public Response getAll() {
 		List<Place> placesList = placeDAO.getPlaces(studentContext);
         return successRequest(placesList);
 	}

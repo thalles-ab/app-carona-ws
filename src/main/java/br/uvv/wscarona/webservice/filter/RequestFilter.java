@@ -26,7 +26,7 @@ import br.uvv.wscarona.webservice.util.MessageException;
 
 @PreMatching
 @RequestScoped 
-public class RequestFiler implements ContainerRequestFilter{
+public class RequestFilter implements ContainerRequestFilter{
 	private static final String AUTHENTICATION_HEADER = "Authorization";
 	private static final String LANGUAGE_HEADER = "Accept-Language";
 	private static final String URL_LOGIN = "login";
@@ -56,10 +56,11 @@ public class RequestFiler implements ContainerRequestFilter{
 		
 		// CHECK TOKEN AUTHORIZATION
 		String token = containerRequest.getHeaderString(AUTHENTICATION_HEADER);
-		if(fullUri.replace(baseUri, "").equals(URL_LOGIN) && containerRequest.getMethod().equals(HttpMethod.POST) || fullUri.replace(baseUri, "").equals("student/create")){
+		if((fullUri.replace(baseUri, "").equals(URL_LOGIN) && containerRequest.getMethod().equals(HttpMethod.POST)) ||
+				(fullUri.replace(baseUri, "").equals("student") && containerRequest.getMethod().equals(HttpMethod.POST))){
 			// TODO
 		}else if(StringUtils.isNullOrEmpty(token)){
-			list.getErros().add(new MessageException(resourceBundle.getString("error_no_token")));
+			list.getErros().add(new MessageException(resourceBundle.getString("error.no.token")));
 			status = Status.FORBIDDEN; 
 		}else{
 			try {
