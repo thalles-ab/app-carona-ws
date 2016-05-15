@@ -2,8 +2,7 @@ package br.uvv.wscarona.webservice;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import javax.ws.rs.core.*;
 import javax.ws.rs.core.Response.Status;
 
 import com.google.gson.Gson;
@@ -18,6 +17,8 @@ public class BaseWebService {
 	protected Gson gson;
 	protected ListMessageException erros;
 	protected static Student studentContext;
+	@Context
+	HttpHeaders headers;
 
 	public BaseWebService() {
 		this.gson = getGsonInstance();
