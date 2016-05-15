@@ -27,7 +27,7 @@ public class PlaceWebService extends BaseWebService {
             //No momento, apenas cria, pois não tem referência de PK ou UK.
             Place place = gson.fromJson(request, Place.class);
             place.setStudent(studentContext);
-            place.setSituation(TypeSituation.Enable);
+            place.setSituation(TypeSituation.ENABLE);
             return successRequest(placeDAO.saveOrUpdate(place));
         }
         catch (ListMessageException e){

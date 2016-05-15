@@ -29,7 +29,7 @@ public class PlaceDAO extends GenericDAO {
         StringBuilder hql = new StringBuilder("SELECT p FROM Place p WHERE p.student.id = :studentId and p.situation = :situation");
         Query query = this.entityManager.createQuery(hql.toString());
         query.setParameter("studentId", student.getId());
-        query.setParameter("situation", TypeSituation.Enable);
+        query.setParameter("situation", TypeSituation.ENABLE);
         return (List<Place>)query.getResultList();
     }
 
@@ -58,7 +58,7 @@ public class PlaceDAO extends GenericDAO {
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void delete(String id){
         Place placeToDelete = getPlace(id);
-        placeToDelete.setSituation(TypeSituation.Disable);
+        placeToDelete.setSituation(TypeSituation.DISABLE);
         entityManager.merge(placeToDelete);
     }
     

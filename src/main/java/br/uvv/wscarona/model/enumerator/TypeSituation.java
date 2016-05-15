@@ -1,6 +1,9 @@
 package br.uvv.wscarona.model.enumerator;
 
+import com.google.gson.annotations.SerializedName;
+
 public enum TypeSituation {
-	Enable,
-	Disable
+	ENABLE,
+	DISABLE,
+	PENDING
 }
