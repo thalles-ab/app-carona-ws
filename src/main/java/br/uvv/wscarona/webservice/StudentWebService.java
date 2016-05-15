@@ -50,7 +50,7 @@ public class StudentWebService extends BaseWebService {
             contextUser.setEmail(user.getEmail());
             contextUser.setCellPhone(user.getCellPhone());
             studentDAO.saveOrUpdate(contextUser);
-            return successRequest(contextUser);
+            return successRequest();
         } catch (ListMessageException list) {
             return badRequest(list);
         }
