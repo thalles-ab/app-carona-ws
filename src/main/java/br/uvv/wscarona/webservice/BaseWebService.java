@@ -14,6 +14,7 @@ import br.uvv.wscarona.webservice.util.ListMessageException;
 @Consumes({MediaType.APPLICATION_JSON})
 @Produces({MediaType.APPLICATION_JSON})
 public class BaseWebService {
+	private static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZZZ";
 	protected Gson gson;
 	protected ListMessageException erros;
 	protected static Student studentContext;
@@ -43,6 +44,7 @@ public class BaseWebService {
 	
 	public static Gson getGsonInstance() {
 		final GsonBuilder builder = new GsonBuilder();
+		builder.setDateFormat(DATE_FORMAT).create();
 		builder.excludeFieldsWithoutExposeAnnotation();
 		return builder.create();
 	}
