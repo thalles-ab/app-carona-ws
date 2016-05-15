@@ -29,6 +29,10 @@ public class SolicitationRide  extends BaseModel{
 	@ManyToOne(fetch = FetchType.LAZY)
 	@Expose(deserialize = true, serialize = true)
 	private Ride ride;
+
+	@JoinColumn(name = "ID_PLACE")
+	@Expose(deserialize = true, serialize = true)
+	private Place place;
 	
 	@Column(name = "TP_SITUATION")
 	private TypeSituation situation;
@@ -55,5 +59,13 @@ public class SolicitationRide  extends BaseModel{
 
 	public void setSituation(TypeSituation situation) {
 		this.situation = situation;
+	}
+
+	public Place getPlace() {
+		return place;
+	}
+
+	public void setPlace(Place place) {
+		this.place = place;
 	}
 }

@@ -23,25 +23,33 @@ public class SolicitationRideDAO extends GenericDAO{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-    @Inject
-    private StudentRideDAO studentRideDAO;
+    @Inject private StudentRideDAO studentRideDAO;
 
     private static final String SELECT_COUNT_STUDENT_RIDE_BY_RIDE = "SELECT COUNT(sr.id) FROM StudentRide sr WHERE sr.ride.id =:rideId";
-    private static final String SELECT_EXISTS_STUDENT_RIDE_BY_STUDENT = "SELECT SYSDATE FROM StudentRide sr WHERE sr.student.id =:studentId AND sr.ride.id =:rideId";
+    private static final String SELECT_STUDENT_RIDE_BY_STUDENT = "SELECT sr FROM StudentRide sr WHERE sr.student.id =:studentId AND sr.ride.id =:rideId";
     private static final String SELECT_SOLICITATION_RIDE = "SELECT sr FROM SolicitationRide sr JOIN Student st ON sr.student.id = st.id WHERE sr.id =:solicitationRideId";
+    private static final String SELECT_SOLICITATION_RIDE_BY_RIDE_AND_STUDENT = "SELECT sr FROM SolicitationRide sr WHERE sr.student.id =:studentId AND sr.ride.id =:rideId";
 	
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void create(SolicitationRide solicitationRide) throws ListMessageException{
         try{
             fullValidation(solicitationRide);
             Ride ride = (Ride) searchById(solicitationRide.getRide());
-            if(ride == null){
-                this.erros.addError("error.invalid.ride");
+            try{
+                StringBuilder hqlSolicitationRide= new StringBuilder(SELECT_SOLICITATION_RIDE_BY_RIDE_AND_STUDENT);
+                Query querySolicitationRide = this.entityManager.createQuery(hqlSolicitationRide.toString());
+                querySolicitationRide.setParameter("studentId", solicitationRide.getStudent().getId());
+                querySolicitationRide.setParameter("rideId", solicitationRide.getRide().getId());
+                querySolicitationRide.getSingleResult();
+                this.erros.addError("error.solicitation.ride.has.found");
+            }catch (NoResultException e){
+                solicitationRide.setSituation(TypeSituation.PENDING);
+                this.entityManager.merge(solicitationRide);
             }
-            this.throwErros();
-            solicitationRide.setSituation(TypeSituation.PENDING);
-            this.entityManager.merge(solicitationRide);
-        }catch(NoResultException e){}
+        }catch(NoResultException e){
+            this.erros.addError("error.invalid.ride");
+        }
+        this.throwErros();
     }
 
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
@@ -49,32 +57,41 @@ public class SolicitationRideDAO extends GenericDAO{
         try {
             Student student = (Student) searchById(solicitationRide.getStudent());
             Ride ride = (Ride) searchById(solicitationRide.getRide());
-
-            StringBuilder hqlStudentRide = new StringBuilder(SELECT_EXISTS_STUDENT_RIDE_BY_STUDENT);
-            Query queryStudentRide = this.entityManager.createQuery(hqlStudentRide.toString());
-            queryStudentRide.setParameter("studentId", student.getId());
-            queryStudentRide.setParameter("rideId", ride.getId());
-
-            try {
+            try{
+                StringBuilder hqlStudentRide = new StringBuilder(SELECT_STUDENT_RIDE_BY_STUDENT);
+                Query queryStudentRide = this.entityManager.createQuery(hqlStudentRide.toString());
+                queryStudentRide.setParameter("studentId", student.getId());
+                queryStudentRide.setParameter("rideId", ride.getId());
                 queryStudentRide.getSingleResult();
-                this.entityManager.detach(solicitationRide);
+                this.erros.addError("error.student.has.found.ride");
+            } catch (NoResultException e) {
                 StudentRide studentRide = new StudentRide();
                 studentRide.setStudent(student);
                 studentRide.setRide(ride);
-                this.studentRideDAO.entityManager.merge(studentRide);
-                solicitationRide.setSituation(TypeSituation.DISABLE);
-                this.entityManager.merge(solicitationRide);
-            }catch (NoResultException e){
-                throw new ListMessageException("error.student.has.found.ride");
+                this.entityManager.merge(studentRide);
+
+                SolicitationRide solicitationRideAux = (SolicitationRide) searchById(solicitationRide);
+                solicitationRideAux.setSituation(TypeSituation.DISABLE);
+                this.entityManager.merge(solicitationRideAux);
             }
-        } catch (NoResultException e) {}
+        }catch (NoResultException e){
+            this.erros.addError("error.invalid.student.or.ride");
+        }
+        this.throwErros();
     }
 
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void reject(SolicitationRide solicitationRide) throws ListMessageException {
         try{
-            solicitationRide.setSituation(TypeSituation.DISABLE);
-            this.entityManager.merge(solicitationRide);
+            SolicitationRide solicitationRideAux = (SolicitationRide) searchById(solicitationRide);
+
+            if(solicitationRideAux == null){
+                this.erros.addError("error.invalid.solicitation.ride");
+            }
+            this.throwErros();
+
+            solicitationRideAux.setSituation(TypeSituation.DISABLE);
+            this.entityManager.merge(solicitationRideAux);
         }catch (NoResultException e){}
     }
     

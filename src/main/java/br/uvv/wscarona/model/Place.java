@@ -27,11 +27,11 @@ public class Place extends BaseModel {
 	
 	@Column(name = "DS_LATITUDE")
 	@Expose(deserialize = true, serialize = true)
-	private String latitude;
+	private Double latitude;
 	
 	@Column(name = "DS_LONGITUDE")
 	@Expose(deserialize = true, serialize = true)
-	private String longitude;
+	private Double longitude;
 	
 	@Column(name = "DS_DESCRIPTION")
 	@Expose(deserialize = true, serialize = true)
@@ -52,19 +52,19 @@ public class Place extends BaseModel {
 		this.student = student;
 	}
 
-	public String getLatitude() {
+	public Double getLatitude() {
 		return latitude;
 	}
 
-	public void setLatitude(String latitude) {
+	public void setLatitude(Double latitude) {
 		this.latitude = latitude;
 	}
 
-	public String getLongitude() {
+	public Double getLongitude() {
 		return longitude;
 	}
 
-	public void setLongitude(String longitude) {
+	public void setLongitude(Double longitude) {
 		this.longitude = longitude;
 	}
 
