@@ -31,6 +31,17 @@ public class StudentDAO extends GenericDAO {
 		return (List<Student>) query.getResultList();
 	}
 
+    public Student getStudent(Long id) throws ListMessageException {
+        if(id==null || id<=0){
+            this.erros.addRquiredField("attr.student.id");
+        }
+        this.throwErros();
+        Student student = new Student();
+        student.setId(id);
+        student = (Student)searchById(student);
+        return student;
+    }
+
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public Student saveOrUpdate(Student student) throws ListMessageException{
         try{
