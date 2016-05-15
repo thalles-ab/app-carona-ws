@@ -56,7 +56,6 @@ public class StudentWebService extends BaseWebService {
         }
     }
 
-
 	@POST
     public Response create(String json){
         Student user = this.gson.fromJson(json, Student.class);

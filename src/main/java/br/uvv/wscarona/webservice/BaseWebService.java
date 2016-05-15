@@ -12,7 +12,7 @@ import br.uvv.wscarona.model.Student;
 import br.uvv.wscarona.webservice.util.ListMessageException;
 
 @Consumes({MediaType.APPLICATION_JSON})
-@Produces({MediaType.APPLICATION_JSON})
+@Produces({MediaType.APPLICATION_JSON+"; chatset=utf8"})
 public class BaseWebService {
 	private static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZZZ";
 	protected Gson gson;

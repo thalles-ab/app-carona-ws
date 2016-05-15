@@ -6,6 +6,7 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.Query;
 
 import br.uvv.wscarona.webservice.util.MessageBundle;
@@ -20,7 +21,8 @@ public class StudentDAO extends GenericDAO {
 	/**
 	 * 
 	 */
-    private static final String SELECT_STUDENT_BY_EMAIL = "SELECT st FROM Student st WHERE st.email = :email";
+    private static final String SELECT_STUDENT_BY_EMAIL_OR_CODE = "SELECT st FROM Student st WHERE (st.email like :email OR st.code like :code) and st.id != :id";
+    private static final String SELECT_STUDENT_BY_EMAIL = "SELECT st FROM Student st WHERE st.email like :email and st.id != :id";
 	private static final long serialVersionUID = 1L;
 
 	@SuppressWarnings("unchecked")
@@ -42,26 +44,58 @@ public class StudentDAO extends GenericDAO {
         return student;
     }
 
+    public Boolean isUniqueCodeOrEmail(Student student){
+        try{
+            StringBuilder hql = new StringBuilder(SELECT_STUDENT_BY_EMAIL_OR_CODE);
+            Query query = this.entityManager.createQuery(hql.toString());
+            query.setParameter("email", student.getEmail());
+            query.setParameter("code", student.getCode());
+            query.setParameter("id", student.getId());
+            query.getSingleResult();
+            return false;
+        }
+        catch (NoResultException e){
+            return true;
+        }
+        catch (NonUniqueResultException e){
+            return true;
+        }
+    }
+
+    public Boolean isUniqueEmail(Student student){
+        try{
+            StringBuilder hql = new StringBuilder(SELECT_STUDENT_BY_EMAIL);
+            Query query = this.entityManager.createQuery(hql.toString());
+            query.setParameter("email", student.getEmail());
+            query.setParameter("id", student.getId());
+            query.getSingleResult();
+            return false;
+        }
+        catch (NoResultException e){
+            return true;
+        }
+        catch (NonUniqueResultException e){
+            return true;
+        }
+    }
+
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public Student saveOrUpdate(Student student) throws ListMessageException{
-        try{
-            fullValidation(student);
-            this.throwErros();
-            if(student.getId()==0L){
-                StringBuilder hql = new StringBuilder(SELECT_STUDENT_BY_EMAIL);
-                Query query = this.entityManager.createQuery(hql.toString());
-                query.setParameter("email", student.getEmail());
-                query.getSingleResult();
+        fullValidation(student);
+        this.throwErros();
+        if(student.getId()==0) {
+            if (isUniqueCodeOrEmail(student) == false) {
+                this.erros.addError("error.invalid.register");
+                this.throwErros();
             }
-            else{
-                return (Student)this.merge(student);
-            }
-            this.erros.addError("error.invalid.register");
-            this.throwErros();
-        }catch(NoResultException e){
-            this.merge(student);
         }
-        return student;
+        else{
+            if(isUniqueEmail(student) == false){
+                this.erros.addError("error.invalid.email");
+                this.throwErros();
+            }
+        }
+        return (Student)this.merge(student);
     }
     
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
