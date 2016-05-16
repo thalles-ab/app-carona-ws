@@ -1,5 +1,6 @@
 package br.uvv.wscarona.webservice;
 
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Objects;
 
@@ -15,6 +16,7 @@ import br.uvv.wscarona.dao.PlaceDAO;
 import br.uvv.wscarona.model.Place;
 import br.uvv.wscarona.model.enumerator.TypeSituation;
 import br.uvv.wscarona.webservice.util.ListMessageException;
+import com.google.gson.reflect.TypeToken;
 
 @Path("/place")
 @RequestScoped
@@ -71,7 +73,8 @@ public class PlaceWebService extends BaseWebService {
     @Path("/delete")
     public Response delete(String json){
         try{
-            List<Place> places = gson.fromJson(json, List.class);
+            Type type = new TypeToken<List<Place>>() {}.getType();
+            List<Place> places = gson.fromJson(json, type);
             this.placeDAO.delete(places);
             return successRequest();
         }
