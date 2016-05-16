@@ -57,7 +57,7 @@ public class RequestFilter implements ContainerRequestFilter{
 		// CHECK TOKEN AUTHORIZATION
 		String token = containerRequest.getHeaderString(AUTHENTICATION_HEADER);
 		if((fullUri.replace(baseUri, "").equals(URL_LOGIN) && containerRequest.getMethod().equals(HttpMethod.POST)) ||
-				(fullUri.replace(baseUri, "").equals("student") && containerRequest.getMethod().equals(HttpMethod.POST))){
+				((fullUri.replace(baseUri, "").equals("student") || fullUri.replace(baseUri, "").equals("student/")) && containerRequest.getMethod().equals(HttpMethod.POST))){
 			// TODO
 		}else if(StringUtils.isNullOrEmpty(token)){
 			list.getErros().add(new MessageException(resourceBundle.getString("error.no.token")));

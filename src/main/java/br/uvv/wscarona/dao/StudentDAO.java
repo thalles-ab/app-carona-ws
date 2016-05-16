@@ -21,8 +21,8 @@ public class StudentDAO extends GenericDAO {
 	/**
 	 * 
 	 */
+    private static final String SELECT_STUDENT_BY_EMAIL = "SELECT st FROM Student st WHERE st.email like :email";
     private static final String SELECT_STUDENT_BY_EMAIL_OR_CODE = "SELECT st FROM Student st WHERE (st.email like :email OR st.code like :code) and st.id != :id";
-    private static final String SELECT_STUDENT_BY_EMAIL = "SELECT st FROM Student st WHERE st.email like :email and st.id != :id";
 	private static final long serialVersionUID = 1L;
 
 	@SuppressWarnings("unchecked")
@@ -67,15 +67,17 @@ public class StudentDAO extends GenericDAO {
             StringBuilder hql = new StringBuilder(SELECT_STUDENT_BY_EMAIL);
             Query query = this.entityManager.createQuery(hql.toString());
             query.setParameter("email", student.getEmail());
-            query.setParameter("id", student.getId());
-            query.getSingleResult();
+            Student studentResult = (Student)query.getSingleResult();
+            if( studentResult.getId() == student.getId() ){
+                return true;
+            }
             return false;
         }
         catch (NoResultException e){
             return true;
         }
         catch (NonUniqueResultException e){
-            return true;
+            return false;
         }
     }
 

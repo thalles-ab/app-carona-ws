@@ -43,7 +43,6 @@ public class RideDAO extends GenericDAO {
         .append("AND  ride.DT_EXPIRATION >= NOW() ")
         .append("AND _GetKmDistance(startPoint.DS_LATITUDE, startPoint.DS_LONGITUDE, ?2, ?3) <= 0.2 ")
         .append("AND _GetKmDistance(endPoint.DS_LATITUDE, endPoint.DS_LONGITUDE, ?4, ?5) <= 0.2");
-
     public void delete(Long id) throws ListMessageException{
         Ride ride = new Ride();
         ride.setId(id);
