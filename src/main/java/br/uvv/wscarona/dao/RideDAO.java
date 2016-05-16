@@ -32,6 +32,7 @@ public class RideDAO extends GenericDAO {
     private static final String SELECT_RIDE = "Select rd from Ride rd join rd.studentList sList WHERE rd.id = :idRide";
     private static final String DELETE_RIDE = "Select rd from Ride rd WHERE rd.id =:id ";
     private static final long serialVersionUID = 1L;
+    private static final String SELECT_RIDES_FROM_USER = "Select rd from Ride rd where rd.student.id = :id";
     private static final StringBuilder SELECT_RIDES_BY_LAT_LONG = new StringBuilder("SELECT ")
         .append("ride.ID, ride.ID_STUDENT, ride.TP_DAY, ride.DT_CREATION, ride.DT_EXPIRATION, ride.QT_PASSENGERS, ")
         .append("ride.DS_ROUTE_GOOGLE_FORMAT, ride.ID_PLACE_START, ride.ID_PLACE_END, ride.VERSION, ride.TP_SITUATION, ride.FL_SHOW_CELL_PHONE ")
@@ -43,6 +44,7 @@ public class RideDAO extends GenericDAO {
         .append("AND  ride.DT_EXPIRATION >= NOW() ")
         .append("AND _GetKmDistance(startPoint.DS_LATITUDE, startPoint.DS_LONGITUDE, ?2, ?3) <= 0.2 ")
         .append("AND _GetKmDistance(endPoint.DS_LATITUDE, endPoint.DS_LONGITUDE, ?4, ?5) <= 0.2");
+
     public void delete(Long id) throws ListMessageException{
         Ride ride = new Ride();
         ride.setId(id);
@@ -53,6 +55,18 @@ public class RideDAO extends GenericDAO {
         }
         ride.setSituation(TypeSituation.DISABLE);
         merge(ride);
+    }
+
+    public List<Ride> myRides(Student student){
+        StringBuilder hql = new StringBuilder(SELECT_RIDES_FROM_USER);
+        Query query = this.entityManager.createQuery(hql.toString());
+        query.setParameter("id", student.getId());
+        try{
+            return query.getResultList();
+        }
+        catch (Exception e){
+            throw e;
+        }
     }
 
     public Ride getStudents(Ride ride) throws ListMessageException{

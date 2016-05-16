@@ -36,6 +36,11 @@ public class RideWebService extends BaseWebService {
         }
     }
 
+    @GET
+    public Response getAll(){
+        return successRequest(rideDAO.myRides(this.getStudentContext()));
+    }
+
     @DELETE
     @Path("/{id}")
     public Response deleteRide(@PathParam("id") String rideId) {
