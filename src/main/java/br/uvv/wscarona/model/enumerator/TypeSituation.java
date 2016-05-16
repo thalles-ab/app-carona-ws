@@ -6,4 +6,9 @@ public enum TypeSituation {
 	ENABLE,
 	DISABLE,
 	PENDING;
+
+	public static TypeSituation value(Integer item){
+		TypeSituation[] values = TypeSituation.values();
+		return values[item.intValue()];
+	}
 }
