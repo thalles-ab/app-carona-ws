@@ -3,6 +3,7 @@ package br.uvv.wscarona.dao;
 import br.uvv.wscarona.model.Place;
 import br.uvv.wscarona.model.Ride;
 import br.uvv.wscarona.model.Student;
+import br.uvv.wscarona.model.StudentRide;
 import br.uvv.wscarona.model.enumerator.TypeDay;
 import br.uvv.wscarona.model.enumerator.TypeSituation;
 import br.uvv.wscarona.webservice.util.ListMessageException;
@@ -28,6 +29,7 @@ public class RideDAO extends GenericDAO {
      */
     @Inject
     private StudentDAO studentDAO;
+    private static final String SELECT_RIDE = "Select rd from Ride rd join rd.studentList sList WHERE rd.id = :idRide";
     private static final long serialVersionUID = 1L;
     private static final StringBuilder SELECT_RIDES_BY_LAT_LONG = new StringBuilder("SELECT ")
         .append("ride.ID, ride.ID_STUDENT, ride.TP_DAY, ride.DT_CREATION, ride.DT_EXPIRATION, ride.QT_PASSENGERS, ")
@@ -37,8 +39,21 @@ public class RideDAO extends GenericDAO {
         .append("JOIN TBL_PLACE endPoint on endPoint.ID = ride.ID_PLACE_END ")
         .append("JOIN TBL_STUDENT student on student.ID = ride.ID_STUDENT ")
         .append("WHERE student.ID != ?1 ")
+        .append("AND  ride.DT_EXPIRATION >= NOW() ")
         .append("AND _GetKmDistance(startPoint.DS_LATITUDE, startPoint.DS_LONGITUDE, ?2, ?3) <= 0.2 ")
         .append("AND _GetKmDistance(endPoint.DS_LATITUDE, endPoint.DS_LONGITUDE, ?4, ?5) <= 0.2");
+
+    public Ride getStudents(Ride ride) throws ListMessageException{
+        try{
+            StringBuilder hql = new StringBuilder(SELECT_RIDE);
+            Query query = this.entityManager.createQuery(hql.toString());
+            query.setParameter("idRide", ride.getId());
+            return (Ride)query.getSingleResult();
+        }
+        catch (NoResultException e){
+            return ride;
+        }
+    }
 
     public List<Ride> searchRidesWithSameLatLong(Ride ride){
         Query query = this.entityManager.createNativeQuery(SELECT_RIDES_BY_LAT_LONG.toString());

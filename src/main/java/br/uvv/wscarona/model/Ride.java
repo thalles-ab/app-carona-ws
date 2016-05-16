@@ -2,6 +2,7 @@ package br.uvv.wscarona.model;
 
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.*;
 
@@ -63,6 +64,18 @@ public class Ride extends BaseModel {
 	@Expose(deserialize = true, serialize = true)
 	@Enumerated(EnumType.ORDINAL)
 	private TypeSituation situation;
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "ride")
+	@Expose()
+	private List<StudentRide> studentList;
+
+	public List<StudentRide> getStudentList() {
+		return studentList;
+	}
+
+	public void setStudentList(List<StudentRide> studentList) {
+		this.studentList = studentList;
+	}
 
 	public Student getStudent() {
 		return student;

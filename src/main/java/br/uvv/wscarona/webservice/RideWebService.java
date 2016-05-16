@@ -7,8 +7,10 @@ import br.uvv.wscarona.webservice.util.ListMessageException;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
 import java.util.Date;
 import java.util.List;
@@ -21,6 +23,21 @@ import java.util.List;
 public class RideWebService extends BaseWebService {
     @Inject
     private RideDAO rideDAO;
+
+    @GET
+    @Path("/{id}")
+    public Response getStudentsOnRide(@PathParam("id") String rideId){
+        try{
+            Ride ride = new Ride();
+            ride.setId(Long.parseLong(rideId));
+            ride = (Ride)rideDAO.searchById(ride);
+            ride = rideDAO.getStudents(ride);
+            return successRequest(ride);
+        }
+        catch (ListMessageException list){
+            return badRequest(list);
+        }
+    }
 
     @POST
     public Response save(String json){
