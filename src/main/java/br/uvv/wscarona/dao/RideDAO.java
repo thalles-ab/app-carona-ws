@@ -35,7 +35,7 @@ public class RideDAO extends GenericDAO {
         .append("FROM TBL_RIDE ride ")
         .append("JOIN TBL_PLACE startPoint on startPoint.ID = ride.ID_PLACE_START ")
         .append("JOIN TBL_PLACE endPoint on endPoint.ID = ride.ID_PLACE_END ")
-        .append("JOIN TBL_STUDENT student ")
+        .append("JOIN TBL_STUDENT student on student.ID = ride.ID_STUDENT ")
         .append("WHERE student.ID != ?1 ")
         .append("AND _GetKmDistance(startPoint.DS_LATITUDE, startPoint.DS_LONGITUDE, ?2, ?3) <= 0.2 ")
         .append("AND _GetKmDistance(endPoint.DS_LATITUDE, endPoint.DS_LONGITUDE, ?4, ?5) <= 0.2");
