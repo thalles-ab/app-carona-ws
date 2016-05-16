@@ -9,6 +9,8 @@ import br.uvv.wscarona.dao.SolicitationRideDAO;
 import br.uvv.wscarona.model.SolicitationRide;
 import br.uvv.wscarona.webservice.util.ListMessageException;
 
+import java.util.List;
+
 @Path("/solicitationRide")
 @RequestScoped
 public class SolicitationRideWebService extends BaseWebService{
@@ -26,6 +28,17 @@ public class SolicitationRideWebService extends BaseWebService{
 			return badRequest(list);
 		}
 	}
+
+    @GET
+    @Path("/list")
+    public Response list(){
+        try{
+            List<SolicitationRide> solicitationRideList = solicitationRideDAO.getList(studentContext.getId());
+            return successRequest(solicitationRideList);
+        }catch(ListMessageException list){
+            return badRequest(list);
+        }
+    }
 
     @PUT
     public Response accept(String json) {

@@ -94,6 +94,18 @@ public class SolicitationRideDAO extends GenericDAO{
             this.entityManager.merge(solicitationRideAux);
         }catch (NoResultException e){}
     }
+
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public List<SolicitationRide> getList(Long id)throws ListMessageException {
+        try{
+            StringBuilder hql = new StringBuilder("SELECT sr FROM SolicitationRide sr WHERE sr.student.id = :studentId");
+            Query query = this.entityManager.createQuery(hql.toString());
+            query.setParameter("studentId", id);
+            return (List<SolicitationRide>) query.getResultList();
+        }catch (NoResultException e){
+            return null;
+        }
+    }
     
     public void fullValidation(SolicitationRide solicitationRide){
         if(solicitationRide.getStudent() == null || solicitationRide.getStudent().getId() == null && solicitationRide.getStudent().getId() <= 0){
