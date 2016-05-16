@@ -22,6 +22,7 @@ public class BaseApplication extends Application {
         classes.add(RideWebService.class);
         classes.add(SolicitationRideWebService.class);
         classes.add(StudentRideWebService.class);
+        classes.add(StatisticWebService.class);
         return classes;
     }
 
