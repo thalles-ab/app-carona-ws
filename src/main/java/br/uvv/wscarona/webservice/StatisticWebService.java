@@ -22,25 +22,15 @@ public class StatisticWebService extends BaseWebService{
     private RideDAO rideDAO;
 
     @GET
-    @Path("/amountGivenRides")
-    public Response amountGivenRides() {
+    public Response stats() {
         try{
-            Long count = rideDAO.amountGivenRides(studentContext.getId());
-            StatisticUtil statisticUtil = new StatisticUtil();
-            statisticUtil.setCount(count);
-            return successRequest(statisticUtil);
-        }catch(Exception e){
-            return badRequest();
-        }
-    }
+            Long amountGivenRides = rideDAO.amountGivenRides(studentContext.getId());
+            Long amountTakenRides = rideDAO.amountTakenRides(studentContext.getId());
 
-    @GET
-    @Path("/amountTakenRides")
-    public Response amountTakenRides() {
-        try{
-            Long count = rideDAO.amountTakenRides(studentContext.getId());
             StatisticUtil statisticUtil = new StatisticUtil();
-            statisticUtil.setCount(count);
+            statisticUtil.setAmountGivenRides(amountGivenRides);
+            statisticUtil.setAmountTakenRides(amountTakenRides);
+
             return successRequest(statisticUtil);
         }catch(Exception e){
             return badRequest();
