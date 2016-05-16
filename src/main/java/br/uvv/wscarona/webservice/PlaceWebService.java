@@ -27,7 +27,7 @@ public class PlaceWebService extends BaseWebService {
     public Response SaveOrUpdate(String request) throws ListMessageException {
         try{
             Place place = gson.fromJson(request, Place.class);
-            if(place.getId() == null){
+            if(place.getId() == 0){
                 place.setStudent(studentContext);
                 place.setSituation(TypeSituation.ENABLE);
                 place = placeDAO.create(place);

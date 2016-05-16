@@ -7,13 +7,23 @@ import com.google.gson.annotations.Expose;
  */
 public class StatisticUtil {
     @Expose
-    private Long count;
+    private Long amountTakenRides;
+    @Expose
+    private Long amountGivenRides;
 
-    public Long getCount() {
-        return count;
+    public Long getAmountTakenRides() {
+        return amountTakenRides;
     }
 
-    public void setCount(Long count) {
-        this.count = count;
+    public void setAmountTakenRides(Long amountTakenRides) {
+        this.amountTakenRides = amountTakenRides;
+    }
+
+    public Long getAmountGivenRides() {
+        return amountGivenRides;
+    }
+
+    public void setAmountGivenRides(Long amountGivenRides) {
+        this.amountGivenRides = amountGivenRides;
     }
 }
