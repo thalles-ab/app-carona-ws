@@ -70,12 +70,16 @@ public class PlaceWebService extends BaseWebService {
     }
 
     @POST
-    @Path("/delete")
+    @Path("/delete/")
     public Response delete(String json){
         try{
             Type type = new TypeToken<List<Place>>() {}.getType();
             List<Place> places = gson.fromJson(json, type);
-            this.placeDAO.delete(places);
+
+            for (Place place : places) {
+                place.setStudent(studentContext);
+                this.placeDAO.delete(place);
+            }
             return successRequest();
         }
         catch (ListMessageException list){
