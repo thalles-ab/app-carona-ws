@@ -98,9 +98,19 @@ public class RideDAO extends GenericDAO {
 		this.entityManager.merge(ride);
     }
 
-//    public int quantityRides(){
-//
-//    }
+    public Long amountGivenRides(Long id){
+        StringBuilder hql = new StringBuilder("SELECT COUNT(r.id) FROM Ride r WHERE r.student.id = :studentId");
+        Query query = this.entityManager.createQuery(hql.toString());
+        query.setParameter("studentId", id);
+        return (Long) query.getSingleResult();
+    }
+
+    public Long amountTakenRides(Long id){
+        StringBuilder hql = new StringBuilder("SELECT COUNT(r.id) FROM StudentRide r WHERE r.student.id = :studentId");
+        Query query = this.entityManager.createQuery(hql.toString());
+        query.setParameter("studentId", id);
+        return (Long) query.getSingleResult();
+    }
 
     public void fullValidation(Ride ride){
         if(ride.getExpirationDate() == null){
