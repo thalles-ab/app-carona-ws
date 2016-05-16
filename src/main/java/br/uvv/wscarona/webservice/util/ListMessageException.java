@@ -30,11 +30,13 @@ public class ListMessageException extends Exception {
 	private List<MessageException> erros;
 
 	public void addError(String key) {
-		this.erros.add(new MessageException(MessageBundle.getMessage(key)));
+		String mensagem = MessageBundle.getMessage(key);
+		this.erros.add(new MessageException(mensagem));
 	}
 
 	public void addError(String key, Object... params) {
-		this.erros.add(new MessageException(MessageBundle.getMessage(key, params)));
+		String mensagem = MessageBundle.getMessage(key, params);
+		this.erros.add(new MessageException(mensagem));
 	}
 
 	public void addRquiredField(String keyField) {
