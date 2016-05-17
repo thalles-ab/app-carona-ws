@@ -40,6 +40,18 @@ public class SolicitationRideWebService extends BaseWebService{
         }
     }
 
+
+    @GET
+    @Path("/solicitations")
+    public Response solicitationsToMe(){
+        try{
+            List<SolicitationRide> solicitationRideList = solicitationRideDAO.solicitationsToMyRides(studentContext.getId());
+            return successRequest(solicitationRideList);
+        }catch(ListMessageException list){
+            return badRequest(list);
+        }
+    }
+
     @PUT
     public Response accept(String json) {
         try{

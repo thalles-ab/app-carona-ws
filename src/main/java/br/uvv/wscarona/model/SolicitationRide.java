@@ -21,12 +21,12 @@ public class SolicitationRide  extends BaseModel{
 	private static final long serialVersionUID = 1L;
 	
 	@JoinColumn(name = "ID_STUDENT")
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@Expose(deserialize = true, serialize = true)
 	private Student student;
 	
 	@JoinColumn(name = "ID_RIDE")
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@Expose(deserialize = true, serialize = true)
 	private Ride ride;
 
